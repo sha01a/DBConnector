@@ -8,7 +8,7 @@ import java.util.*;
 public class DbTemplate {
 
     private String name;
-    private List<String> fields;
+    private List<DescVal> fields;
     private List<String> params;
 
 
@@ -31,7 +31,7 @@ public class DbTemplate {
         return this.name;
     }
 
-    public List<String> getFields(){
+    public List<DescVal> getFields(){
         return this.fields;
     }
 
@@ -39,14 +39,25 @@ public class DbTemplate {
         return this.params;
     }
 
-    public void addField(String field){
+    public void addDescr(String descr){
         if(this.fields==null) this.fields = new ArrayList<>();
-        this.fields.add(field);
+        DescVal dv = new DescVal();
+        dv.setDescr(descr);
+        this.fields.add(dv);
     }
 
     public void addParam(String param){
         if(this.params==null) this.params = new ArrayList<>();
         this.params.add(param);
+    }
+
+    public void resolveParams(){
+        for(int i=0; i<params.size(); i++){
+            for(DescVal current : this.fields){
+                String temp = params.get(i).replaceAll(current.getDescr(), current.getValue());
+                params.set(i, temp);
+            }
+        }
     }
 
 }
