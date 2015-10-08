@@ -1,7 +1,13 @@
 package com.dbconnector.connect;
 
+import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
@@ -14,20 +20,40 @@ import java.util.Properties;
  */
 public class Connect {
 
+    public static void main(String [] args) throws IOException {
+        DbTemplate mysql = FileRead.readDbList("").get(0);
+        mysql.getFields().get(0).setValue("localhost");
+        mysql.getFields().get(1).setValue("databasename");
+   //     mysql.getFields().get(2).setValue("666");
+        mysql.getFields().get(2).setValue("usr");
+        mysql.getFields().get(3).setValue("pwd");
+        connectToDB(mysql);
+    }
+
     public static void connectToDB(DbTemplate db){
         db.resolveParams();
+        for (String p :db.getParams()) {
+            System.out.println(p);
+        }
         Connection conn = null;
         try {
             int paramCount = db.getParams().size();
-            Driver driver = DriverManager.getDriver(db.getParams().get(0));
-            if(driver == null){
-                //download driver?
-                //DriverManager.registerDriver(newDriver);
-            }
+//            if(driver == null){
+//                URL website = new URL("http://shaola.de/driver1");
+//                System.out.println(website.getFile());
+//                //URL driverUrl = new URL(db.getDriverPath());
+//                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+//                //FileOutputStream fos = new FileOutputStream("information.html");
+//                FileOutputStream fos = new FileOutputStream(website.getFile().replaceFirst("/", "").replaceAll("/", "."));
+//                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+//                //DriverManager.registerDriver(newDriver);
+//            }
             if(paramCount==1){
+                System.out.println("Paramcount: " + paramCount);
                 conn = DriverManager.getConnection(db.getParams().get(0));
             }
             else if(paramCount==3){
+                System.out.println("Paramcount: " + paramCount);
                 conn = DriverManager.getConnection(db.getParams().get(0), db.getParams().get(1), db.getParams().get(2));
             }
             else{

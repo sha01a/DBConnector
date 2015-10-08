@@ -14,22 +14,24 @@ import java.util.List;
  */
 public class FileRead {
 
-//    public static void main(String [] args) throws IOException {
-//        List<DbTemplate> test = readDbList("");
-//        DbTemplate test1 = test.get(0);
-//        System.out.println(test1.getName());
-//        System.out.println("---------------------------");
-//        test1.getFields().get(0).setValue("172.0.0.1");
-//        test1.getFields().get(1).setValue("WarDB");
-//        test1.getFields().get(2).setValue("666");
-//        test1.getFields().get(3).setValue("user");
-//        test1.getFields().get(4).setValue("pwd");
-//        test1.resolveParams();
-//        for(String p : test1.getParams()){
-//            System.out.println(p);
-//        }
-//    }
-
+/**     Testing ONLY
+ *      public static void main(String [] args) throws IOException {
+        List<DbTemplate> test = readDbList("");
+        DbTemplate test1 = test.get(0);
+        System.out.println(test1.getName());
+        System.out.println("---------------------------");
+        test1.getFields().get(0).setValue("172.0.0.1");
+        test1.getFields().get(1).setValue("WarDB");
+        test1.getFields().get(2).setValue("666");
+        test1.getFields().get(3).setValue("user");
+        test1.getFields().get(4).setValue("pwd");
+        test1.resolveParams();
+        for(String p : test1.getParams()){
+            System.out.println(p);
+        }
+    }
+*/
+    // Reads dblist.txt file and exports the text-based settings into DbTemplates
     public static List<DbTemplate> readDbList(String path) throws IOException {
         FileReader reader = new FileReader("C:/Users/shaola/IdeaProjects/DBConnector/src/com/dbconnector/io/dblist.txt");
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -60,22 +62,17 @@ public class FileRead {
                 if(line.trim().startsWith("param=")){
                     current.addParam(line.trim().replaceFirst("param=", ""));
                 }
+                if(line.trim().startsWith("driver=")){
+                    current.setDriverPath(line.trim().replaceFirst("driver=", ""));
+                }
+                if(line.trim().startsWith("forcedriver=")){
+                    if((line.trim().replaceFirst("forcedriver=","")).contains("true")) {
+                        current.forceDriver();
+                    }
+                }
             }
         }
         reader.close();
-
-/** Test ONLY
-        for(DbTemplate dbt : dbList){
-            System.out.println(dbt.getName());
-            for(String f : dbt.getFields()){
-                System.out.println(f);
-            }
-            for(String p : dbt.getParams()){
-                System.out.println(p);
-            }
-            System.out.println("---------------------------");
-        }
-*/
         return dbList;
     }
 

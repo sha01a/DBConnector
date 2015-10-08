@@ -1,11 +1,38 @@
-## BASIC FILE
+## This file holds connection schemes for different Databases
+##
+## Each database description starts with
+##
+## db{
+##
+## and ends with
+##
+## }
+##
+## There are several Keywords to describe the connection.
+## name - Name of the connection template (ususally database name)
+##
+## fields - Comma (,) separated list of fields that need to be filled with actual connection details
+##
+## param - Represents either the whole connection String or the basic connection string and two additional
+## parameter (susually username and password). There can be either one or three param statements. Within the param
+## statement (it's right side) there should be representation of how the connection parameters are built. Any
+## field name (fields) will be later replaced by it's actual value.
+##
+## driver - URL of driver. This will be only downloaded and used if no driver is avaliable on system.
+##
+## forcedriver - This will decide if the driver will be used and added to the system even if appropriate driver is
+## avaliable. Possbile values are true or false. Default is false.
+##
 db{
       name=MySQL
-      fields=Server,Database,Port,User,Password
-      param=jdbc:mysql://Server:Port/Database?user=User&password=Password
+      fields=Server,Database,User,Password
+      param=jdbc:mysql://Server/Database?user=User&password=Password
 ##      param=jdbc:mysql://Server:Port/Database
 ##      param=User
 ##      param=Password
+      driver=http://shaola.de/driver1
+      forcedriver=true
+
    }
 db{
     name=Oracle

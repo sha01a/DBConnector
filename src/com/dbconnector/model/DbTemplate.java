@@ -4,39 +4,56 @@ import java.util.*;
 
 /**
  * Created by Dmitry Chokovski
+ *
+ * Internal representation of Database connection details, bundled for each database type.
  */
 public class DbTemplate {
 
-    private String name;
-    private List<DescVal> fields;
+    private String name; // Name of Template (e.g. MySQL, MySQL w/o Port, Oracle etc.)
+    private List<DescVal> fields; // Pairs of Values - Description + Value
     private List<String> params;
+    private String driverPath;
+    private boolean forcedDriver;
 
 
     //Full Constructor
-    public DbTemplate(String name, List<String> fields, List<String> params) {
+    public DbTemplate(String name, List<String> fields, List<String> params, boolean forcedDriver) {
         this.name = "DefaultName";
+        this.forcedDriver = forcedDriver;
         this.fields = null;
         this.params = null;
     }
 
     // Minimal Constructor
     public DbTemplate(){
+        this.forcedDriver = false;
     }
 
     public void setName(String name){
         this.name=name;
     }
 
-    public String getName(){
-        return this.name;
-    }
+    // Getter Methods
+    public String getName(){ return this.name; }
 
-    public List<DescVal> getFields(){
-        return this.fields;
-    }
+    public List<DescVal> getFields(){ return this.fields; }
 
     public List<String> getParams(){
         return this.params;
+    }
+
+    public String getDriverPath() { return this.driverPath; }
+
+    public boolean getForcedDriver() { return this.forcedDriver; }
+
+    // Setter Methods
+
+    public void forceDriver(){
+        this.forcedDriver=true;
+    }
+
+    public void setDriverPath(String driverPath){
+        this.driverPath=driverPath;
     }
 
     public void addDescr(String descr){
