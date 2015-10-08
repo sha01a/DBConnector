@@ -25,5 +25,6 @@ public class Test {
             }
         }
         display.dispose();
+        System.out.print("AC"+"AB");
     }
 }

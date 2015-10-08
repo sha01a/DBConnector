@@ -2,14 +2,15 @@
 db{
       name=MySQL
       fields=Server,Database,Port,User,Password
-      param=jdbc:mysql://Server:Port/Database
-      param=User
-      param=Password
+      param=jdbc:mysql://Server:Port/Database?user=User&password=Password
+##      param=jdbc:mysql://Server:Port/Database
+##      param=User
+##      param=Password
    }
 db{
     name=Oracle
     fields=Server,Database,Port,User,Password
-    param=jdbc:oracle:@Server:Port/Database
-    param=User
-    param=Password
+##    param=jdbc:oracle:@Server:Port/Database
+##    param=User
+##    param=Password
  }
