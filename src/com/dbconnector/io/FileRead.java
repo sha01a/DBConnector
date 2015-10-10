@@ -3,11 +3,11 @@ package com.dbconnector.io;
 import com.dbconnector.model.DbTemplate;
 import com.dbconnector.model.DescVal;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by shaola on 16.09.2015.
@@ -36,40 +36,28 @@ public class FileRead {
         FileReader reader = new FileReader("C:/Users/shaola/IdeaProjects/DBConnector/src/com/dbconnector/io/dblist.txt");
         BufferedReader bufferedReader = new BufferedReader(reader);
         String line;
-        boolean dbStatus=false;
+        boolean foundDB=false;
         List<DbTemplate> dbList = new ArrayList<>();
         DbTemplate current = new DbTemplate();
+        String buffer = "";
         while ((line = bufferedReader.readLine()) != null) {
-            if(line.trim().startsWith("##")) continue;
-            if(line.contains("db{") && dbStatus==false) {
-                dbStatus=true;
-                current = new DbTemplate();
-            }
-            if(line.contains("}") && dbStatus==true) {
-                dbStatus=false;
-                dbList.add(current);
+            if(line.trim().startsWith("#") || line.trim().startsWith("!")) continue;
+
+            if(line.trim().startsWith("db{")){
+                foundDB = true;
+                buffer = "";
             }
 
-            if(dbStatus){
-                if(line.trim().startsWith("name=")){
-                    current.setName(line.trim().replaceFirst("name=", ""));
-                }
-                if(line.trim().startsWith("fields=")){
-                    for(String f : line.trim().replaceFirst("fields=", "").split(",")) {
-                        current.addDescr(f);
-                    }
-                }
-                if(line.trim().startsWith("param=")){
-                    current.addParam(line.trim().replaceFirst("param=", ""));
-                }
-                if(line.trim().startsWith("driver=")){
-                    current.setDriverPath(line.trim().replaceFirst("driver=", ""));
-                }
-                if(line.trim().startsWith("forcedriver=")){
-                    if((line.trim().replaceFirst("forcedriver=","")).contains("true")) {
-                        current.forceDriver();
-                    }
-                }
+            if(line.trim().startsWith("}")){
+                foundDB = false;
+                StringReader bufferReader = new StringReader(buffer);
+                Properties bufferProperties = new Properties();
+                bufferProperties.load(bufferReader);
+                dbList.add(new DbTemplate(bufferProperties));
+            }
+
+            if(foundDB && !line.startsWith("db{")){
+                buffer = buffer + "\n" + line;
             }
         }
         reader.close();

@@ -9,72 +9,101 @@ import java.util.*;
  */
 public class DbTemplate {
 
-    private String name; // Name of Template (e.g. MySQL, MySQL w/o Port, Oracle etc.)
-    private List<DescVal> fields; // Pairs of Values - Description + Value
-    private List<String> params;
-    private String driverPath;
-    private boolean forcedDriver;
+//    private String name; // Name of Template (e.g. MySQL, MySQL w/o Port, Oracle etc.)
+//    private List<DescVal> fields; // Pairs of Values - Description + Value
+//    private List<String> params;
+//    private String driverPath;
+//    private boolean forcedDriver;
 
+    private Properties properties;
+    private Map<String, String> fields;
 
-    //Full Constructor
-    public DbTemplate(String name, List<String> fields, List<String> params, boolean forcedDriver) {
-        this.name = "DefaultName";
-        this.forcedDriver = forcedDriver;
-        this.fields = null;
-        this.params = null;
-    }
 
     // Minimal Constructor
-    public DbTemplate(){
-        this.forcedDriver = false;
+    public DbTemplate() {
     }
 
-    public void setName(String name){
-        this.name=name;
+    // Constructor for FileRead
+    public DbTemplate(Properties properties) {
+        this.properties = properties;
+        this.createFields();
     }
 
-    // Getter Methods
-    public String getName(){ return this.name; }
-
-    public List<DescVal> getFields(){ return this.fields; }
-
-    public List<String> getParams(){
-        return this.params;
+    public Properties getProperties(){
+        return this.properties;
     }
 
-    public String getDriverPath() { return this.driverPath; }
-
-    public boolean getForcedDriver() { return this.forcedDriver; }
-
-    // Setter Methods
-
-    public void forceDriver(){
-        this.forcedDriver=true;
+    public Map<String, String> getFields(){
+        return this.fields;
     }
 
-    public void setDriverPath(String driverPath){
-        this.driverPath=driverPath;
+    public void createFields(){
+        int i = 0;
+        for (String s : this.getProperties().getProperty("fields").split(",")){
+            s.trim();
+            if(this.fields == null) this.fields = new HashMap<String, String>();
+            this.fields.put(s, "default" + i);
+            i++;
+        }
+        this.getProperties().remove("fields");
     }
 
-    public void addDescr(String descr){
-        if(this.fields==null) this.fields = new ArrayList<>();
-        DescVal dv = new DescVal();
-        dv.setDescr(descr);
-        this.fields.add(dv);
-    }
-
-    public void addParam(String param){
-        if(this.params==null) this.params = new ArrayList<>();
-        this.params.add(param);
-    }
-
-    public void resolveParams(){
-        for(int i=0; i<params.size(); i++){
-            for(DescVal current : this.fields){
-                String temp = params.get(i).replaceAll(current.getDescr(), current.getValue());
-                params.set(i, temp);
-            }
+    public void resolveURL(){
+        for(Map.Entry<String,String> entry : this.fields.entrySet()) {
+            this.properties.setProperty("url", this.properties.getProperty("url").replaceAll(entry.getKey(), entry.getValue()));
         }
     }
 
+
 }
+
+
+//    public void setName(String name){
+//        this.name=name;
+//    }
+//
+//    // Getter Methods
+//    public String getName(){ return this.name; }
+//
+//    public List<DescVal> getFields(){ return this.fields; }
+//
+//    public List<String> getParams(){
+//        return this.params;
+//    }
+//
+//    public String getDriverPath() { return this.driverPath; }
+//
+//    public boolean getForcedDriver() { return this.forcedDriver; }
+//
+//    // Setter Methods
+//
+//    public void forceDriver(){
+//        this.forcedDriver=true;
+//    }
+//
+//    public void setDriverPath(String driverPath){
+//        this.driverPath=driverPath;
+//    }
+//
+//    public void addDescr(String descr){
+//        if(this.fields==null) this.fields = new ArrayList<>();
+//        DescVal dv = new DescVal();
+//        dv.setDescr(descr);
+//        this.fields.add(dv);
+//    }
+//
+//    public void addParam(String param){
+//        if(this.params==null) this.params = new ArrayList<>();
+//        this.params.add(param);
+//    }
+//
+//    public void resolveParams(){
+//        for(int i=0; i<params.size(); i++){
+//            for(DescVal current : this.fields){
+//                String temp = params.get(i).replaceAll(current.getDescr(), current.getValue());
+//                params.set(i, temp);
+//            }
+//        }
+//    }
+//
+//}
