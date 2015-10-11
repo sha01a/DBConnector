@@ -1,4 +1,4 @@
-package com.dbconnector.model;
+package com.dbconnector.deprecated;
 
 /**
  * Created by shaola on 17.09.2015.

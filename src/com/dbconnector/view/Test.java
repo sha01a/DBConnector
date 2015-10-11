@@ -1,27 +1,19 @@
-package com.dbconnector.gui;
+package com.dbconnector.view;
 
+import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.io.*;
-import com.dbconnector.model.DbTemplate;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.util.List;
-import java.util.Map;
-
-import com.dbconnector.model.DbTemplate;
 
 /**
  * Created by shaola on 17.09.2015.
+ *
+ * Test class / Sandbox.
+ *
  */
 public class Test {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NoDriverFoundException {
         URL testLoc = new URL("http://shaola.de/driver1");
         System.out.println(Downloader.downloadDriver(testLoc).getName());
     }

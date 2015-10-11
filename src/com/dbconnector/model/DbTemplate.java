@@ -6,14 +6,11 @@ import java.util.*;
  * Created by Dmitry Chokovski
  *
  * Internal representation of Database connection details, bundled for each database type.
+ *
  */
 public class DbTemplate {
 
-//    private String name; // Name of Template (e.g. MySQL, MySQL w/o Port, Oracle etc.)
-//    private List<DescVal> fields; // Pairs of Values - Description + Value
-//    private List<String> params;
-//    private String driverPath;
-//    private boolean forcedDriver;
+
 
     private Properties properties;
     private Map<String, String> fields;
@@ -57,6 +54,12 @@ public class DbTemplate {
 
 }
 
+
+//    private String name; // Name of Template (e.g. MySQL, MySQL w/o Port, Oracle etc.)
+//    private List<DescVal> fields; // Pairs of Values - Description + Value
+//    private List<String> params;
+//    private String driverPath;
+//    private boolean forcedDriver;
 
 //    public void setName(String name){
 //        this.name=name;

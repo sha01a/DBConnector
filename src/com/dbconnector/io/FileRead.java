@@ -1,10 +1,8 @@
 package com.dbconnector.io;
 
 import com.dbconnector.model.DbTemplate;
-import com.dbconnector.model.DescVal;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
