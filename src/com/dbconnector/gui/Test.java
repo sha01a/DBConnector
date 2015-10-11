@@ -1,6 +1,6 @@
 package com.dbconnector.gui;
 
-import com.dbconnector.io.FileRead;
+import com.dbconnector.io.*;
 import com.dbconnector.model.DbTemplate;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -22,13 +22,13 @@ import com.dbconnector.model.DbTemplate;
  */
 public class Test {
     public static void main(String[] args) throws IOException {
-        java.util.Enumeration e = java.sql.DriverManager.getDrivers();
-        while (e.hasMoreElements()) {
-            Object driverAsObject = e.nextElement();
-            System.out.println("JDBC Driver=" + driverAsObject);
-        }
+        URL testLoc = new URL("http://shaola.de/driver1");
+        System.out.println(Downloader.downloadDriver(testLoc).getName());
     }
 }
+
+
+// Path to properties file: "C:/Users/shaola/IdeaProjects/DBConnector/src/com/dbconnector/io/dblist.properties"
 
 //        List<DbTemplate> dbList = FileRead.readDbList("");
 //        DbTemplate db = dbList.get(0);

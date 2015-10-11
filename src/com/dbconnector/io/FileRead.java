@@ -13,27 +13,9 @@ import java.util.Properties;
  * Created by shaola on 16.09.2015.
  */
 public class FileRead {
-
-/**     Testing ONLY
- *      public static void main(String [] args) throws IOException {
-        List<DbTemplate> test = readDbList("");
-        DbTemplate test1 = test.get(0);
-        System.out.println(test1.getName());
-        System.out.println("---------------------------");
-        test1.getFields().get(0).setValue("172.0.0.1");
-        test1.getFields().get(1).setValue("WarDB");
-        test1.getFields().get(2).setValue("666");
-        test1.getFields().get(3).setValue("user");
-        test1.getFields().get(4).setValue("pwd");
-        test1.resolveParams();
-        for(String p : test1.getParams()){
-            System.out.println(p);
-        }
-    }
-*/
-    // Reads dblist.txt file and exports the text-based settings into DbTemplates
+    // Reads dblist.properties file and returns the text-based settings as DbTemplates
     public static List<DbTemplate> readDbList(String path) throws IOException {
-        FileReader reader = new FileReader("C:/Users/shaola/IdeaProjects/DBConnector/src/com/dbconnector/io/dblist.txt");
+        FileReader reader = new FileReader(path);
         BufferedReader bufferedReader = new BufferedReader(reader);
         String line;
         boolean foundDB=false;
