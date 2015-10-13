@@ -3,47 +3,77 @@ package com.dbconnector.io;
 import com.dbconnector.model.DbTemplate;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * Created by shaola on 16.09.2015.
  */
 public class FileRead {
-    // Reads dblist.properties file and returns the text-based settings as DbTemplates
-    public static List<DbTemplate> readDbList(String path) throws IOException {
-        FileReader reader = new FileReader(path);
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        String line;
-        boolean foundDB=false;
+    // Reads all .properties file from given direcroty and returns a list of according DbTemplates
+    public static Map<String, DbTemplate> readDbList(String pathOfDir) throws IOException {
+
         List<DbTemplate> dbList = new ArrayList<>();
-        DbTemplate current = new DbTemplate();
-        String buffer = "";
-        while ((line = bufferedReader.readLine()) != null) {
-            if(line.trim().startsWith("#") || line.trim().startsWith("!")) continue;
+        Map<String,DbTemplate> dbListHandle = new HashMap<>();
 
-            if(line.trim().startsWith("db{")){
-                foundDB = true;
-                buffer = "";
-            }
+        // Iteration over all files in given Directory
+        Files.walk(Paths.get("/Users/shaola/Desktop")).forEach(filePath -> {
+            // If found .properties File (no directories included in check)
+            if (Files.isRegularFile(filePath) && filePath.getFileName().endsWith(".properties")) {
+                try {
+                    Properties currentProperties = new Properties();
+                    currentProperties.load(Files.newBufferedReader(filePath));
+                    dbList.add(new DbTemplate(currentProperties));
 
-            if(line.trim().startsWith("}")){
-                foundDB = false;
-                StringReader bufferReader = new StringReader(buffer);
-                Properties bufferProperties = new Properties();
-                bufferProperties.load(bufferReader);
-                dbList.add(new DbTemplate(bufferProperties));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ;
+                // Output to check what files were handled - TESTING ONLY
+                System.out.println(filePath.getParent());
+                System.out.println(filePath.getFileName());
             }
+        });
 
-            if(foundDB && !line.startsWith("db{")){
-                buffer = buffer + "\n" + line;
-            }
+        // Maps DbLists to a Handle represented by "name" property
+        for(int i=0; i< dbList.size(); i++){
+            dbListHandle.put(dbList.get(i).getProperties().getProperty("name"), dbList.get(i));
         }
-        reader.close();
-        return dbList;
+
+        return dbListHandle;
     }
-
-
-
 }
+
+//
+//
+//
+//        //FileReader reader = new FileReader(path);
+//        //BufferedReader bufferedReader = new BufferedReader(reader);
+//        String line;
+//        boolean foundDB=false;
+//       // List<DbTemplate> dbList = new ArrayList<>();
+//        String buffer = "";
+//        while ((line = bufferedReader.readLine()) != null) {
+//            if(line.trim().startsWith("#") || line.trim().startsWith("!")) continue;
+//
+//            if(line.trim().startsWith("db{")){
+//                foundDB = true;
+//                buffer = "";
+//            }
+//
+//            if(line.trim().startsWith("}")){
+//                foundDB = false;
+//                StringReader bufferReader = new StringReader(buffer);
+//                Properties bufferProperties = new Properties();
+//                bufferProperties.load(bufferReader);
+//                dbList.add(new DbTemplate(bufferProperties));
+//            }
+//
+//            if(foundDB && !line.startsWith("db{")){
+//                buffer = buffer + "\n" + line;
+//            }
+//        }
+//        //reader.close();
+//        return dbList;
+//    }

@@ -5,6 +5,8 @@ import com.dbconnector.io.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Created by shaola on 17.09.2015.
@@ -14,11 +16,23 @@ import java.net.URL;
  */
 public class Test {
     public static void main(String[] args) throws IOException, NoDriverFoundException {
-        URL testLoc = new URL("http://shaola.de/driver1");
-        System.out.println(Downloader.downloadDriver(testLoc).getName());
+        // Iteration over all files in given Directory
+        Files.walk(Paths.get("/Users/shaola/Desktop")).forEach(filePath -> {
+            // If found .properties File (no directories included in check)
+            if (Files.isRegularFile(filePath) && filePath.getFileName().endsWith(".properties")) {
+
+
+
+                // Output to check what files were handled - TESTING ONLY
+                System.out.println(filePath.getParent());
+                System.out.println(filePath.getFileName());
+            }
+        });
     }
 }
 
+//        URL testLoc = new URL("http://shaola.de/driver1");
+//        System.out.println(Downloader.downloadDriver(testLoc).getName());
 
 // Path to properties file: "C:/Users/shaola/IdeaProjects/DBConnector/src/com/dbconnector/io/dblist.properties"
 
