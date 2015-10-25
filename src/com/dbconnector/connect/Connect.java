@@ -20,22 +20,9 @@ import java.util.jar.JarFile;
  * Used to connect to Databases by creating Connection-Objects
  *
  */
+
 public class Connect {
 
-    public static void main(String [] args) throws IOException, ClassNotFoundException, NoDriverFoundException {
-        DbTemplate mysql = FileRead.readDbList("").get(0);
-
-//        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        listDrivers();
-
-        mysql.getFields().put("User", "admin");
-        mysql.getFields().put("Server", "192.168.1.1");
-        mysql.getFields().put("Database", "testdb");
-        mysql.getFields().put("Password", "qwerty");
-
-        mysql.resolveURL();
-        connectToDB(mysql);
-    }
 
     // Establishes connection to database, returns Connection Object.
     public static Connection connectToDB(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException{
@@ -71,6 +58,23 @@ public class Connect {
         }
     }
 }
+
+
+
+//    public static void main(String [] args) throws IOException, ClassNotFoundException, NoDriverFoundException {
+//        DbTemplate mysql = FileRead.readDbList("").get(0);
+//
+////        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//        listDrivers();
+//
+//        mysql.getFields().put("User", "admin");
+//        mysql.getFields().put("Server", "192.168.1.1");
+//        mysql.getFields().put("Database", "testdb");
+//        mysql.getFields().put("Password", "qwerty");
+//
+//        mysql.resolveURL();
+//        connectToDB(mysql);
+//    }
 
 
 //            int paramCount = db.getParams().size();

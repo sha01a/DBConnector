@@ -1,4 +1,4 @@
-package com.dbconnector.view;
+package com.dbconnector.test;
 
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.io.*;
@@ -17,12 +17,9 @@ import java.nio.file.Paths;
 public class Test {
     public static void main(String[] args) throws IOException, NoDriverFoundException {
         // Iteration over all files in given Directory
-        Files.walk(Paths.get("/Users/shaola/Desktop")).forEach(filePath -> {
+        Files.walk(Paths.get("/Users/shaola/IntellijProjects/DBConnector/properties/")).forEach(filePath -> {
             // If found .properties File (no directories included in check)
-            if (Files.isRegularFile(filePath) && filePath.getFileName().endsWith(".properties")) {
-
-
-
+            if (Files.isRegularFile(filePath) && filePath.getFileName().toString().endsWith(".properties")) {
                 // Output to check what files were handled - TESTING ONLY
                 System.out.println(filePath.getParent());
                 System.out.println(filePath.getFileName());
@@ -34,7 +31,7 @@ public class Test {
 //        URL testLoc = new URL("http://shaola.de/driver1");
 //        System.out.println(Downloader.downloadDriver(testLoc).getName());
 
-// Path to properties file: "C:/Users/shaola/IdeaProjects/DBConnector/src/com/dbconnector/io/dblist.properties"
+// Path to properties file: "C:/Users/shaola/IdeaProjects/DBConnector/properties/mysql.properties"
 
 //        List<DbTemplate> dbList = FileRead.readDbList("");
 //        DbTemplate db = dbList.get(0);

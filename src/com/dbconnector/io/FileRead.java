@@ -18,9 +18,9 @@ public class FileRead {
         Map<String,DbTemplate> dbListHandle = new HashMap<>();
 
         // Iteration over all files in given Directory
-        Files.walk(Paths.get("/Users/shaola/Desktop")).forEach(filePath -> {
+        Files.walk(Paths.get(pathOfDir)).forEach(filePath -> {
             // If found .properties File (no directories included in check)
-            if (Files.isRegularFile(filePath) && filePath.getFileName().endsWith(".properties")) {
+            if (Files.isRegularFile(filePath) && filePath.getFileName().toString().endsWith(".properties")) {
                 try {
                     Properties currentProperties = new Properties();
                     currentProperties.load(Files.newBufferedReader(filePath));
