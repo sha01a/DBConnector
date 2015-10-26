@@ -5,6 +5,7 @@ import com.dbconnector.io.Downloader;
 import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -31,11 +32,12 @@ public class Connect {
         try {
             if(properties.getProperty("forceDriver").equals("true") || DriverManager.getDriver(properties.getProperty("url"))==null){
                 // Downloads driver
-                JarFile newDriver = Downloader.downloadDriver(Downloader.makeUrl(properties.getProperty("driver")));
+                File newDriver = Downloader.downloadDriver(Downloader.makeUrl(properties.getProperty("driver")));
+                //newDriver.
                 // Loads Class from driver .jar
-                Class.forName(""); // DUMMY
+                //Class.forName(""); // DUMMY
                 // Registers driver with DriverManager
-                DriverManager.registerDriver(null); // DUMMY
+                //DriverManager.registerDriver(null); // DUMMY
             }
             connection = DriverManager.getConnection(template.getProperties().getProperty("url"));
         } catch (SQLException ex){

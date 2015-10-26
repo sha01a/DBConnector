@@ -12,18 +12,18 @@ import java.util.jar.JarFile;
 /**
  * Created by Dmitry Chokovski on 11.10.2015.
  *
- * Class used for dowload of JDBC Drivers.
+ * Class used for download of JDBC Drivers.
  *
  */
 public class Downloader {
 
-    public static JarFile downloadDriver(URL driverLocation) throws IOException, FileNotFoundException, NoDriverFoundException {
+    public static File downloadDriver(URL driverLocation) throws IOException, FileNotFoundException, NoDriverFoundException {
         if (driverLocation==null) throw new NoDriverFoundException();
         ReadableByteChannel rbc = Channels.newChannel(driverLocation.openStream());
         FileOutputStream fos = new FileOutputStream(parseToName(driverLocation));
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         fos.close();
-        return new JarFile(parseToName(driverLocation));
+        return new File(parseToName(driverLocation));
     }
 
     public static String parseToName(URL url){

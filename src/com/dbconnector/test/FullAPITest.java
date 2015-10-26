@@ -35,7 +35,7 @@ public class FullAPITest {
         testTemplate.getFields().put("Database", "testdb");
         testTemplate.getFields().put("Password", "qwerty");
 
-        // Resolvinb URL by substituting field names with above params
+        // Resolving URL by substituting field names with above params
         testTemplate.resolveURL();
 
         // Establishing connection to DB
