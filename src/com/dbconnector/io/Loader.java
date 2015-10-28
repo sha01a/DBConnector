@@ -29,13 +29,14 @@ public class Loader {
 
         URLClassLoader classLoader = new URLClassLoader (paths);
 
-        //Class classToLoad = Class.forName ("com.MyClass", true, child);
-        if(dbTemplate.getProperties().getProperty("driverClass") != null){
-            Class driver = Class.forName(dbTemplate.getProperties().getProperty("driverClass"));
 
-        } else {
+        // Loading class given in Properties
+        if(dbTemplate.getProperties().getProperty("driverClass") != null){
+            classLoader.loadClass(dbTemplate.getProperties().getProperty("driverClass"));
+        } else { // If no class given loading set Main class of .jar Package
             if(jarFile.getManifest().getEntries().containsKey("Main-Class")) {
-                String mainClassName = jarFile.getManifest().getEntries().get("Main-Class").toString();
+                String mainClassName = jarFile.getManifest().getMainAttributes().getValue("Main-Class");;
+                classLoader.loadClass(mainClassName);
             } else {
                 throw new ClassNotFoundException();
             }
