@@ -31,8 +31,8 @@ public class FileRead {
                 }
                 ;
                 // Output to check what files were handled - TESTING ONLY
-                System.out.println(filePath.getParent());
-                System.out.println(filePath.getFileName());
+                // System.out.println(filePath.getParent());
+                // System.out.println(filePath.getFileName());
             }
         });
 
