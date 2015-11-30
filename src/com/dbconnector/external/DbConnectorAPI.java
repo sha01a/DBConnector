@@ -17,6 +17,7 @@ import java.util.Scanner;
  * This interface defines the functions that a API user can use in his/her software.
  *
  */
+
 public interface DbConnectorAPI {
 
     /* Parse & Connect */
@@ -44,9 +45,9 @@ public interface DbConnectorAPI {
     public Connection connectToDb(DbType type, String dbname);
 
 
-    /* Additional functions */
+    /* Testing / Debugging functions */
 
-    // Manually populate fields
+    // Manually populate fields by console input
     public void manualPopulateFields(DbTemplate dbTemplate);
 
     // Shows all available Drivers

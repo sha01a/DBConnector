@@ -11,8 +11,13 @@ import java.util.Properties;
 import java.util.Scanner;
 
 /**
- * Created by shaola on 30.11.15.
+ * Created by Dmitry Chokovski on 30.11.15.
+ *
+ *
+ * This class implements the functions defined in "DbConnectorAPI"
+ *
  */
+
 public class APIFunctions implements DbConnectorAPI {
 
     public APIFunctions() {
