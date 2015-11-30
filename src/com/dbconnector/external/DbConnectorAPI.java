@@ -17,7 +17,6 @@ import java.util.Scanner;
  *
  * This interface defines the functions that a API user can use in his/her software.
  *
- *
  */
 
 public interface DbConnectorAPI {

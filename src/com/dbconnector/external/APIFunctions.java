@@ -18,7 +18,7 @@ import java.util.Scanner;
  * Created by Dmitry Chokovski on 30.11.15.
  *
  *
- * This class implements the functions defined in "DbConnectorAPI"
+ * This class implements the functions defined in "DbConnectorAPI".
  *
  */
 
