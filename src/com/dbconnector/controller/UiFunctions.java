@@ -1,6 +1,7 @@
 package com.dbconnector.controller;
 
 import com.dbconnector.connect.Connect;
+import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.model.DbTemplate;
 
@@ -11,7 +12,7 @@ import java.sql.Connection;
  */
 public class UiFunctions {
 
-    public static Connection connect(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException {
+    public static Connection connect(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException {
 
         // Getting Values from Input
 

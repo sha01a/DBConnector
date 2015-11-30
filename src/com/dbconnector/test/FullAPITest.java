@@ -2,6 +2,7 @@ package com.dbconnector.test;
 
 import com.dbconnector.*;
 import com.dbconnector.connect.Connect;
+import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 public class FullAPITest {
 
-    public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException {
+    public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException {
 
         // Reading Properties and creating DbTemplates, then putting them into map, Key = name-property
         Map<String, DbTemplate> templates = FileRead.readDbList("/Users/shaola/IntellijProjects/DBConnector/properties");

@@ -1,5 +1,6 @@
 package com.dbconnector.external;
 import com.dbconnector.*;
+import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.model.DbTemplate;
 import com.dbconnector.model.DbType;
 
@@ -16,13 +17,15 @@ import java.util.Scanner;
  *
  * This interface defines the functions that a API user can use in his/her software.
  *
+ *
  */
 
 public interface DbConnectorAPI {
 
-    /* Parse & Connect */
+    /* All in One - DEMO */
+    // NOTE: This function is as a console-based demonstration of how this API should be integrated!
 
-    public Connection parseAndConnectToDb(String pathOfPropertiesDirectory, String nameOfDb);
+    public Connection APIDemo(String pathOfPropertiesDirectory) throws IOException, FieldsNotSetException;
 
     /* Reading Properties and Creating DbTemplates */
 
@@ -30,7 +33,7 @@ public interface DbConnectorAPI {
 
     /* Connection functions */
 
-    // Connection via DbTemplates - Please make sure DbTemplate.fields hold connection values!
+    // Connection via DbTemplates
     public Connection connectToDb(Map dbTemplateMap, String dbName);
 
     public Connection connectToDb(DbTemplate dbTemplate) throws IOException;
@@ -51,7 +54,7 @@ public interface DbConnectorAPI {
     public void manualPopulateFields(DbTemplate dbTemplate);
 
     // Shows all available Drivers
-    public String listDrivers();
+    public void listDrivers();
 
 
 }

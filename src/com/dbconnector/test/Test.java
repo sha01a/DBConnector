@@ -1,16 +1,10 @@
 package com.dbconnector.test;
 
+import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.external.APIFunctions;
-import com.dbconnector.external.DbConnectorAPI;
-import com.dbconnector.io.*;
-import com.dbconnector.model.DbTemplate;
 
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Map;
 
 /**
  * Created by Dmitry Chokovski on 17.09.2015.
@@ -19,13 +13,8 @@ import java.util.Map;
  *
  */
 public class Test extends APIFunctions {
-    public static void main(String[] args) throws IOException, NoDriverFoundException {
-        Map<String, DbTemplate> templates = new APIFunctions().readConfigs("/Users/shaola/IntellijProjects/DBConnector/properties/");
-        //System.out.println(templates.get("MySQL").getFields().get("Server"));
-        new APIFunctions().manualPopulateFields(templates.get("MySQL"));
-        for(Map.Entry<String, String> entry : templates.get("MySQL").getFields().entrySet()){
-            System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
-        }
+    public static void main(String[] args) throws IOException, NoDriverFoundException, FieldsNotSetException {
+        new APIFunctions().APIDemo("/Users/shaola/IntellijProjects/DBConnector/properties/");
     }
 }
 

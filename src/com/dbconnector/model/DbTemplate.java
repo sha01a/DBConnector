@@ -1,5 +1,7 @@
 package com.dbconnector.model;
 
+import com.dbconnector.exceptions.FieldsNotSetException;
+
 import java.util.*;
 
 /**
@@ -10,10 +12,9 @@ import java.util.*;
  */
 public class DbTemplate {
 
-
-
     private Properties properties;
     private Map<String, String> fields;
+    private boolean fieldsDefined;
 
 
     // Minimal Constructor
@@ -22,8 +23,21 @@ public class DbTemplate {
 
     // Constructor for FileRead
     public DbTemplate(Properties properties) {
+        this.fieldsDefined = false;
         this.properties = properties;
         this.createFields();
+    }
+
+    public void ready(){
+        this.fieldsDefined = true;
+    }
+
+    public void unReady(){
+        this.fieldsDefined = false;
+    }
+
+    public boolean isReady(){
+        return this.fieldsDefined;
     }
 
     public Properties getProperties(){
@@ -45,7 +59,8 @@ public class DbTemplate {
         this.getProperties().remove("fields");
     }
 
-    public void resolveURL(){
+    public void resolveURL() throws FieldsNotSetException{
+        if(this.isReady() == false) throw new FieldsNotSetException();
         for(Map.Entry<String,String> entry : this.fields.entrySet()) {
             this.properties.setProperty("url", this.properties.getProperty("url").replaceAll(entry.getKey(), entry.getValue()));
         }
