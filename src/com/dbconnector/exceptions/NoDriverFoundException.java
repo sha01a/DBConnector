@@ -1,7 +1,7 @@
 package com.dbconnector.exceptions;
 
 /**
- * Created by shaola on 11.10.2015.
+ * Created by Dmitry Chokovski on 11.10.2015.
  */
 public class NoDriverFoundException extends Exception{
 
