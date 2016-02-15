@@ -8,5 +8,9 @@ package com.dbconnector.model;
  */
 
 public enum DbType {
-    MYSQL, ORACLE, MSSQL, POSTGRESQL, DB2
+    MYSQL,
+    ORACLE,
+    MSSQL,
+    POSTGRESQL,
+    DB2
 }

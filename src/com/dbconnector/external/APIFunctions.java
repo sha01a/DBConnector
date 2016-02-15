@@ -1,9 +1,12 @@
 package com.dbconnector.external;
 
 import com.dbconnector.exceptions.FieldsNotSetException;
+import com.dbconnector.exceptions.NoDriverFoundException;
+import com.dbconnector.exceptions.RequiredParameterNotSetException;
 import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
 import com.dbconnector.model.DbType;
+import com.dbconnector.net.Connect;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -30,8 +33,9 @@ public class APIFunctions implements DbConnectorAPI {
 
     // NOTE: This function is as a console-based demonstration of how this API works should be integrated!
     @Override
-    public Connection APIDemo(String pathOfPropertiesDirectory) throws IOException {
+    public Connection APIDemo(String pathOfPropertiesDirectory) throws IOException, ClassNotFoundException {
         Scanner reader = new Scanner(System.in);
+        Connection connectionObject = null;
         System.out.println("Reading Properties with \"readConfigs()\"...");
         Map<String,DbTemplate> templateMap = readConfigs(pathOfPropertiesDirectory);
         System.out.println("The following Configurations are available:");
@@ -41,29 +45,27 @@ public class APIFunctions implements DbConnectorAPI {
         System.out.print("\n");
         System.out.println("Please enter name of required Configuration: ");
         String input = reader.next();
-        DbTemplate dbTemplate = templateMap.get(input.trim());
-        System.out.println("You selected \""+input+"\" .");
-        try{
-            System.out.println("Resolving Connection URL from Fields...");
-            dbTemplate.resolveURL();
-
-        } catch (FieldsNotSetException e){
-            System.out.println("FieldsNotSetException! \""+input+"\" does not have any field values set. Please enter the Values for the Fields!");
+        String selection = input.trim();
+        DbTemplate dbTemplate = templateMap.get(selection);
+        System.out.println("You selected \""+selection+"\" .");
+        if(!dbTemplate.isReady()){
+            System.out.println("FieldsNotSetException! \""+selection+"\" does not have any field values set. Please enter the Values for the Fields!");
             manualPopulateFields(dbTemplate);
             System.out.println("The fields are now set!");
         }
-        finally {
-            try {
-                dbTemplate.resolveURL();
-            }
-            catch (Exception e){}
-            System.out.println("Connecting to: " + dbTemplate.getProperties().get("url"));
+        try{
+            System.out.println("Verifying DBTemplate and trying to establish connection...");
+            connectionObject = connectToDb(dbTemplate);
+            if (!connectionObject.equals(null)){ System.out.println("Connection successfully established!"); }
+        } catch (FieldsNotSetException e){
+            e.toString();
+        } catch (RequiredParameterNotSetException e){
+            e.toString();
+        } catch (NoDriverFoundException e){
+            e.toString();
         }
-
-
-
         reader.close();
-        return null;
+        return connectionObject;
     }
 
     @Override
@@ -72,21 +74,30 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(Map dbTemplateMap, String dbName) {
-        return null;
+    public Connection connectToDb(Map<String, DbTemplate> dbTemplateMap, String dbName) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException  {
+        DbTemplate dbTemplate = dbTemplateMap.get(dbName);
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        Connection connectionObject = Connect.establishConnection(dbTemplate);
+        return connectionObject;
     }
 
     @Override
-    public Connection connectToDb(DbTemplate dbTemplate) throws IOException {
-
-
-
-        return null;
+    public Connection connectToDb(DbTemplate dbTemplate) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException  {
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        Connection connectionObject = Connect.establishConnection(dbTemplate);
+        return connectionObject;
     }
 
     @Override
-    public Connection connectToDb(Properties properties, Map<String, String> fields) {
-        return null;
+    public Connection connectToDb(Properties properties, Map<String, String> fields) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException {
+        DbTemplate dbTemplate = new DbTemplate(properties);
+        dbTemplate.setFields(fields);
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        Connection connectionObject = Connect.establishConnection(dbTemplate);
+        return connectionObject;
     }
 
     @Override

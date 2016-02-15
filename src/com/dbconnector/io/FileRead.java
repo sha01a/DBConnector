@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * Created by shaola on 16.09.2015.
+ * Created by Dmitry Chokovski on 16.09.2015.
  */
 public class FileRead {
     // Reads all .properties file from given direcroty and returns a list of according DbTemplates

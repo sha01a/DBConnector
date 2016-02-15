@@ -1,6 +1,6 @@
 package com.dbconnector.controller;
 
-import com.dbconnector.connect.Connect;
+import com.dbconnector.net.Connect;
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.model.DbTemplate;
@@ -20,6 +20,6 @@ public class UiFunctions {
         template.resolveURL();
 
         // Creating Connectiion object
-        return Connect.connectToDB(template);
+        return Connect.establishConnection(template);
     }
 }

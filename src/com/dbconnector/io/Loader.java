@@ -21,7 +21,7 @@ import java.util.jar.JarFile;
 
 public class Loader {
 
-    public void loadDriverClass(DbTemplate dbTemplate, File jar) throws ClassNotFoundException, IOException {
+    public static void loadDriverClass(DbTemplate dbTemplate, File jar) throws ClassNotFoundException, IOException {
         JarFile jarFile = new JarFile(jar);
 
         URL [] paths = new URL[1];

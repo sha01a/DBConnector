@@ -1,8 +1,8 @@
-package com.dbconnector.connect;
+package com.dbconnector.net;
 
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.io.Downloader;
-import com.dbconnector.io.FileRead;
+import com.dbconnector.io.Loader;
 import com.dbconnector.model.DbTemplate;
 
 import java.io.File;
@@ -13,12 +13,11 @@ import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.jar.JarFile;
 
 /**
  * Created by Dmitry Chokovski on 18.09.15.
  *
- * Used to connect to Databases by creating Connection-Objects
+ * Used to net to Databases by creating Connection-Objects
  *
  */
 
@@ -26,25 +25,22 @@ public class Connect {
 
 
     // Establishes connection to database, returns Connection Object.
-    public static Connection connectToDB(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException{
+    public static Connection establishConnection(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException{
         Connection connection = null;
         Properties properties = template.getProperties();
         try {
             if(properties.getProperty("forceDriver").equals("true") || DriverManager.getDriver(properties.getProperty("url"))==null){
                 // Downloads driver
                 File newDriver = Downloader.downloadDriver(Downloader.makeUrl(properties.getProperty("driver")));
-                //newDriver.
-                // Loads Class from driver .jar
-                //Class.forName(""); // DUMMY
-                // Registers driver with DriverManager
-                //DriverManager.registerDriver(null); // DUMMY
+                // Loads driver
+                Loader.loadDriverClass(template, newDriver);
             }
+            // Establishes connection
             connection = DriverManager.getConnection(template.getProperties().getProperty("url"));
         } catch (SQLException ex){
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-            return null;
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -75,7 +71,7 @@ public class Connect {
 //        mysql.getFields().put("Password", "qwerty");
 //
 //        mysql.resolveURL();
-//        connectToDB(mysql);
+//        establishConnection(mysql);
 //    }
 
 

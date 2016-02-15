@@ -1,14 +1,12 @@
 package com.dbconnector.test;
 
-import com.dbconnector.*;
-import com.dbconnector.connect.Connect;
+import com.dbconnector.net.Connect;
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +38,7 @@ public class FullAPITest {
         testTemplate.resolveURL();
 
         // Establishing connection to DB
-        Connect.connectToDB(testTemplate);
+        Connect.establishConnection(testTemplate);
     }
 
 

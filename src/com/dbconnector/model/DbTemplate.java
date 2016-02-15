@@ -1,6 +1,7 @@
 package com.dbconnector.model;
 
 import com.dbconnector.exceptions.FieldsNotSetException;
+import com.dbconnector.exceptions.RequiredParameterNotSetException;
 
 import java.util.*;
 
@@ -44,19 +45,44 @@ public class DbTemplate {
         return this.properties;
     }
 
-    public Map<String, String> getFields(){
-        return this.fields;
-    }
+    public Map<String, String> getFields() { return this.fields; }
+
+    public void setFields(Map<String, String> fields) { this.fields = fields; }
 
     public void createFields(){
         int i = 0;
         for (String s : this.getProperties().getProperty("fields").split(",")){
             s.trim();
             if(this.fields == null) this.fields = new HashMap<String, String>();
-            this.fields.put(s, "default" + i);
+            this.fields.put(s, null);
             i++;
         }
         this.getProperties().remove("fields");
+    }
+
+    public void verify() throws RequiredParameterNotSetException, FieldsNotSetException{
+        List<String> requiredParams = new LinkedList<>();
+        requiredParams.add("name");
+        requiredParams.add("url");
+        requiredParams.add("fields");
+        for(String param : requiredParams){
+            if(!(this.properties.containsKey(param) && !this.properties.get(param).equals(null))){
+                this.unReady();
+                throw new RequiredParameterNotSetException(param);
+            }
+        }
+        if(this.properties.containsKey("requiredFields")){
+            List<String> requiredFields = new LinkedList<>();
+            requiredFields = Arrays.asList(this.properties.getProperty("requiredFields").split(","));
+            for (String field : requiredFields){
+                field = field.trim();
+                if(!(this.fields.containsKey("field") && !this.fields.get("field").equals(null))){
+                    this.unReady();
+                    throw new FieldsNotSetException();
+                }
+            }
+        }
+        this.ready();
     }
 
     public void resolveURL() throws FieldsNotSetException{
