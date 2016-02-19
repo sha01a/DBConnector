@@ -3,6 +3,7 @@ package com.dbconnector.external;
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
+import com.dbconnector.exceptions.TypeUnknownException;
 import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
 import com.dbconnector.model.DbType;
@@ -12,10 +13,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by Dmitry Chokovski on 30.11.15.
@@ -101,17 +99,94 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(DbType type, String dbname, String user, String password, String port) {
+    public Connection connectToDb(DbType type, String dbname, String user, String password, String host, int port) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException {
+        DbTemplate dbTemplate = fetchDbTemplate(type);
+        Map<String, String> fields = new HashMap<>();
+        fields.put("User", user);
+        fields.put("Password", password);
+        fields.put("Database", dbname);
+        fields.put("Server", host);
+        fields.put("Port", String.valueOf(port));
+        dbTemplate.setFields(fields);
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        return Connect.establishConnection(dbTemplate);
+    }
+
+    @Override
+    public Connection connectToDb(DbType type, String dbname, String user, String password, int port) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException {
+        DbTemplate dbTemplate = fetchDbTemplate(type);
+        Map<String, String> fields = new HashMap<>();
+        fields.put("User", user);
+        fields.put("Password", password);
+        fields.put("Database", dbname);
+        fields.put("Server", "localhost");
+        fields.put("Port", String.valueOf(port));
+        dbTemplate.setFields(fields);
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        return Connect.establishConnection(dbTemplate);
+    }
+
+    @Override
+    public Connection connectToDb(DbType type, String dbname, String user, String password, String host) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException {
+        DbTemplate dbTemplate = fetchDbTemplate(type);
+        Map<String, String> fields = new HashMap<>();
+        fields.put("User", user);
+        fields.put("Password", password);
+        fields.put("Database", dbname);
+        fields.put("Server", host);
+        fields.put("Port", String.valueOf(type.getDefaultPort()));
+        dbTemplate.setFields(fields);
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        return Connect.establishConnection(dbTemplate);
+    }
+
+    @Override
+    public Connection connectToDb(DbType type, String dbname, String user, String password) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException {
+        DbTemplate dbTemplate = fetchDbTemplate(type);
+        Map<String, String> fields = new HashMap<>();
+        fields.put("User", user);
+        fields.put("Password", password);
+        fields.put("Database", dbname);
+        fields.put("Server", "localhost");
+        fields.put("Port", String.valueOf(type.getDefaultPort()));
+        dbTemplate.setFields(fields);
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        return Connect.establishConnection(dbTemplate);
+    }
+
+    @Override
+    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException {
+        Connection connectionObject;
+        DbTemplate dbTemplate = fetchDbTemplate(type);
+        Map<String, String > fields = new HashMap<>();
+        fields.put("Database", dbname);
         return null;
     }
 
     @Override
-    public Connection connectToDb(DbType type, String dbname, String user, String password) {
-        return null;
-    }
-
-    @Override
-    public Connection connectToDb(DbType type, String dbname) {
+    public DbTemplate fetchDbTemplate(DbType type) throws TypeUnknownException{
+        DbTemplate dbTemplate = new DbTemplate(new Properties());
+        switch (type){
+            case MYSQL:
+                dbTemplate.getProperties().put("name", "MySQL");
+                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
+                dbTemplate.getProperties().put("url", "url=jdbc:mysql://Server:Port/Database?user=User&password=Password\n");
+                break;
+            case ORACLE:
+                break;
+            case MSSQL:
+                break;
+            case POSTGRESQL:
+                break;
+            case DB2:
+                break;
+            default:
+                throw new TypeUnknownException(type);
+        }
         return null;
     }
 

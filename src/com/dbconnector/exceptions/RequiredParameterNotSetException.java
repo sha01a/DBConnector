@@ -7,9 +7,10 @@ import com.dbconnector.model.DbTemplate;
  */
 public class RequiredParameterNotSetException extends Exception {
 
-    public String fileWithError;
-    public String missingParameter;
+    private String fileWithError;
+    private String missingParameter;
 
+    // Unused
     public RequiredParameterNotSetException(String file, String parameter){
         this.fileWithError = file;
         this.missingParameter = parameter;
@@ -24,10 +25,16 @@ public class RequiredParameterNotSetException extends Exception {
         return "A required Parameter "+ this.missingParameter + " was not found in the properties or has a empty value assigned! This Connection Template will not be usable.";
     }
 
+    public String getMissingParameter() {
+        return this.getMissingParameter();
+    }
+
+    // Unused
     public void setFile(String pathToFile){
         this.fileWithError = pathToFile;
     }
 
+    // Unused
     public void setMissingParameter(String parameter){
         this.missingParameter = parameter;
     }

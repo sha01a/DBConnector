@@ -17,6 +17,8 @@ public class DbTemplate {
     private Map<String, String> fields;
     private boolean fieldsDefined;
 
+    private final List<String> requiredParams = Arrays.asList("name", "url");
+
 
     // Minimal Constructor
     public DbTemplate() {
@@ -42,6 +44,9 @@ public class DbTemplate {
     }
 
     public Properties getProperties(){
+//        if(this.properties == null){
+//            this.properties = new Properties();
+//        }
         return this.properties;
     }
 
@@ -50,21 +55,20 @@ public class DbTemplate {
     public void setFields(Map<String, String> fields) { this.fields = fields; }
 
     public void createFields(){
-        int i = 0;
-        for (String s : this.getProperties().getProperty("fields").split(",")){
+        for (String s : this.getProperties().getProperty("requiredFields").split(",")){
             s.trim();
             if(this.fields == null) this.fields = new HashMap<String, String>();
             this.fields.put(s, null);
-            i++;
         }
-        this.getProperties().remove("fields");
+        for (String s : this.getProperties().getProperty("optionalFields").split(",")){
+            s.trim();
+            if(this.fields == null) this.fields = new HashMap<String, String>();
+            this.fields.put(s, null);
+        }
+        //this.getProperties().remove("fields");
     }
 
     public void verify() throws RequiredParameterNotSetException, FieldsNotSetException{
-        List<String> requiredParams = new LinkedList<>();
-        requiredParams.add("name");
-        requiredParams.add("url");
-        requiredParams.add("fields");
         for(String param : requiredParams){
             if(!(this.properties.containsKey(param) && !this.properties.get(param).equals(null))){
                 this.unReady();

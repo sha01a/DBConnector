@@ -3,6 +3,7 @@ import com.dbconnector.*;
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
+import com.dbconnector.exceptions.TypeUnknownException;
 import com.dbconnector.model.DbTemplate;
 import com.dbconnector.model.DbType;
 
@@ -41,14 +42,27 @@ public interface DbConnectorAPI {
 
     public Connection connectToDb(Properties properties, Map<String,String> fields) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException;
 
-     /* 1+2 - Connection functions with default configs */
+     /* 1+2 - Connection functions with default configs for pre-defined types */
 
-    // Database connection for pre-defined DB Types
-    public Connection connectToDb(DbType type, String dbname, String user, String password, String port);
+    // Full Information needed
+    public Connection connectToDb(DbType type, String dbname, String user, String password, String host, int port) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException;
 
-    public Connection connectToDb(DbType type, String dbname, String user, String password);
+    // Assume localhost for host name
+    public Connection connectToDb(DbType type, String dbname, String user, String password, int port) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException;
 
-    public Connection connectToDb(DbType type, String dbname);
+    // Assume default port (MYSQL: 3306, ORACLE:1521, MSSQL:1433, POSTGRESQL: 5432, DB2: 50000)
+    public Connection connectToDb(DbType type, String dbname, String user, String password, String host) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException;
+
+
+    public Connection connectToDb(DbType type, String dbname, String user, String password) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException;
+
+    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException;
+
+    /* Support Functions */
+
+    // Gets DbTemplate for selected default DbType
+
+    public DbTemplate fetchDbTemplate(DbType type) throws TypeUnknownException;
 
 
     /* Testing / Debugging functions */
