@@ -65,25 +65,35 @@ public class DbTemplate {
             if(this.fields == null) this.fields = new HashMap<String, String>();
             this.fields.put(s, null);
         }
-        //this.getProperties().remove("fields");
     }
 
     public void verify() throws RequiredParameterNotSetException, FieldsNotSetException{
         for(String param : requiredParams){
-            if(!(this.properties.containsKey(param) && !this.properties.get(param).equals(null))){
+            if(!(this.properties.containsKey(param) && !this.properties.getProperty(param).equals(null))){
                 this.unReady();
                 throw new RequiredParameterNotSetException(param);
             }
         }
         if(this.properties.containsKey("requiredFields")){
-            List<String> requiredFields = new LinkedList<>();
-            requiredFields = Arrays.asList(this.properties.getProperty("requiredFields").split(","));
+            List<String> requiredFields = Arrays.asList(this.properties.getProperty("requiredFields").split(","));
             for (String field : requiredFields){
                 field = field.trim();
-                if(!(this.fields.containsKey("field") && !this.fields.get("field").equals(null))){
+                if(!this.fields.containsKey(field) || !this.fields.get(field).equals(null)){
                     this.unReady();
                     throw new FieldsNotSetException();
                 }
+            }
+        }
+        if (this.properties.containsKey("forceDriver")){
+            if (this.properties.getProperty("driver") == null) {
+                this.unReady();
+                throw new RequiredParameterNotSetException("driver");
+            }
+        }
+        if (this.properties.containsKey("forceUrlShort")){
+            if (this.properties.getProperty("urlShort") == null) {
+                this.unReady();
+                throw new RequiredParameterNotSetException("driver");
             }
         }
         this.ready();
@@ -93,6 +103,9 @@ public class DbTemplate {
         if(this.isReady() == false) throw new FieldsNotSetException();
         for(Map.Entry<String,String> entry : this.fields.entrySet()) {
             this.properties.setProperty("url", this.properties.getProperty("url").replaceAll(entry.getKey(), entry.getValue()));
+            if (this.properties.containsKey("urlShort")){
+                this.properties.setProperty("urlShort", this.properties.getProperty("urlShort").replaceAll(entry.getKey(), entry.getValue()));
+            }
         }
     }
 

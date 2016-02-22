@@ -56,7 +56,7 @@ public interface DbConnectorAPI {
 
     public Connection connectToDb(DbType type, String dbname, String user, String password) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException;
 
-    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException;
+    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException;
 
     /* Support Functions */
 
