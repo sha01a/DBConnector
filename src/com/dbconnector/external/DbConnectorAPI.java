@@ -24,11 +24,6 @@ import java.util.Scanner;
 
 public interface DbConnectorAPI {
 
-    /* All in One - DEMO */
-    // NOTE: This function is as a console-based demonstration of how this API should be integrated!
-
-    public Connection APIDemo(String pathOfPropertiesDirectory) throws IOException, FieldsNotSetException, ClassNotFoundException;
-
     /* 1 - Reading Properties and Creating DbTemplates */
 
     public Map readConfigs(String pathOfPropertiesDirectory) throws IOException;
@@ -69,9 +64,6 @@ public interface DbConnectorAPI {
 
     // Manually populate fields by console input
     public void manualPopulateFields(DbTemplate dbTemplate);
-
-    // Shows all available Drivers
-    public void listDrivers();
 
 
 }

@@ -1,13 +1,17 @@
 package com.dbconnector.test;
 
+import com.dbconnector.exceptions.RequiredParameterNotSetException;
 import com.dbconnector.net.Connect;
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
 import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
+import com.dbconnector.external.APIFunctions;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Created by Dmitry Chokovski on 20.10.15.
@@ -19,6 +23,8 @@ import java.util.Map;
 
 
 public class FullAPITest {
+
+    APIFunctions api = new APIFunctions();
 
     public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException {
 
@@ -41,5 +47,40 @@ public class FullAPITest {
         Connect.establishConnection(testTemplate);
     }
 
+
+    public Connection APIDemo(String pathOfPropertiesDirectory) throws IOException, ClassNotFoundException {
+        Scanner reader = new Scanner(System.in);
+        Connection connectionObject = null;
+        System.out.println("Reading Properties with \"readConfigs()\"...");
+        Map<String,DbTemplate> templateMap = api.readConfigs(pathOfPropertiesDirectory);
+        System.out.println("The following Configurations are available:");
+        for(Map.Entry<String,DbTemplate> entry : templateMap.entrySet()){
+            System.out.print(entry.getKey() + " ");
+        }
+        System.out.print("\n");
+        System.out.println("Please enter name of required Configuration: ");
+        String input = reader.next();
+        String selection = input.trim();
+        DbTemplate dbTemplate = templateMap.get(selection);
+        System.out.println("You selected \""+selection+"\" .");
+        if(!dbTemplate.isReady()){
+            System.out.println("FieldsNotSetException! \""+selection+"\" does not have any field values set. Please enter the Values for the Fields!");
+            api.manualPopulateFields(dbTemplate);
+            System.out.println("The fields are now set!");
+        }
+        try{
+            System.out.println("Verifying DBTemplate and trying to establish connection...");
+            connectionObject = api.connectToDb(dbTemplate);
+            if (!connectionObject.equals(null)){ System.out.println("Connection successfully established!"); }
+        } catch (FieldsNotSetException e){
+            e.toString();
+        } catch (RequiredParameterNotSetException e){
+            e.toString();
+        } catch (NoDriverFoundException e){
+            e.toString();
+        }
+        reader.close();
+        return connectionObject;
+    }
 
 }

@@ -16,8 +16,7 @@ import java.sql.DriverManager;
 import java.util.*;
 
 /**
- * Created by Dmitry Chokovski on 30.11.15.
- *
+ * Created by Dmitry Chokovski
  *
  * This class implements the functions defined in "DbConnectorAPI".
  *
@@ -27,43 +26,6 @@ public class APIFunctions implements DbConnectorAPI {
 
     public APIFunctions() {
 
-    }
-
-    // NOTE: This function is as a console-based demonstration of how this API works should be integrated!
-    @Override
-    public Connection APIDemo(String pathOfPropertiesDirectory) throws IOException, ClassNotFoundException {
-        Scanner reader = new Scanner(System.in);
-        Connection connectionObject = null;
-        System.out.println("Reading Properties with \"readConfigs()\"...");
-        Map<String,DbTemplate> templateMap = readConfigs(pathOfPropertiesDirectory);
-        System.out.println("The following Configurations are available:");
-        for(Map.Entry<String,DbTemplate> entry : templateMap.entrySet()){
-            System.out.print(entry.getKey() + " ");
-        }
-        System.out.print("\n");
-        System.out.println("Please enter name of required Configuration: ");
-        String input = reader.next();
-        String selection = input.trim();
-        DbTemplate dbTemplate = templateMap.get(selection);
-        System.out.println("You selected \""+selection+"\" .");
-        if(!dbTemplate.isReady()){
-            System.out.println("FieldsNotSetException! \""+selection+"\" does not have any field values set. Please enter the Values for the Fields!");
-            manualPopulateFields(dbTemplate);
-            System.out.println("The fields are now set!");
-        }
-        try{
-            System.out.println("Verifying DBTemplate and trying to establish connection...");
-            connectionObject = connectToDb(dbTemplate);
-            if (!connectionObject.equals(null)){ System.out.println("Connection successfully established!"); }
-        } catch (FieldsNotSetException e){
-            e.toString();
-        } catch (RequiredParameterNotSetException e){
-            e.toString();
-        } catch (NoDriverFoundException e){
-            e.toString();
-        }
-        reader.close();
-        return connectionObject;
     }
 
     @Override
@@ -142,7 +104,7 @@ public class APIFunctions implements DbConnectorAPI {
         dbTemplate.resolveURL();
         return Connect.establishConnection(dbTemplate);
     }
-
+     // redundaten code verkuerzen
     @Override
     public Connection connectToDb(DbType type, String dbname, String user, String password) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException {
         DbTemplate dbTemplate = fetchDbTemplate(type);
@@ -200,14 +162,5 @@ public class APIFunctions implements DbConnectorAPI {
         }
         reader.close();
         dbTemplate.ready();
-    }
-
-    @Override
-    public void listDrivers() {
-        Enumeration driverList = DriverManager.getDrivers();
-        while (driverList.hasMoreElements()) {
-            Driver driverClass = (Driver) driverList.nextElement();
-            System.out.println("Driver: " + driverClass.getClass().getName());
-        }
     }
 }
