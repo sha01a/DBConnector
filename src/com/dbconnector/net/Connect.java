@@ -15,7 +15,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 /**
- * Created by Dmitry Chokovski on 18.09.15.
+ * Created by Dmitry Chokovski
  *
  * Used to net to Databases by creating Connection-Objects
  *
@@ -36,7 +36,12 @@ public class Connect {
                 Loader.loadDriverClass(template, newDriver);
             }
             // Establishes connection
-            connection = DriverManager.getConnection(template.getProperties().getProperty("url"));
+            if(template.getProperties().getProperty("forceUrlShort") == "true"){
+                connection = DriverManager.getConnection(template.getProperties().getProperty("urlShort"));
+            }
+            else {
+                connection = DriverManager.getConnection(template.getProperties().getProperty("url"));
+            }
         } catch (SQLException ex){
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());

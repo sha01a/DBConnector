@@ -13,7 +13,7 @@ import java.io.IOException;
  *
  */
 public class Test extends APIFunctions {
-    public static void main(String[] args) throws IOException, NoDriverFoundException, FieldsNotSetException {
+    public static void main(String[] args) throws IOException, NoDriverFoundException, FieldsNotSetException, ClassNotFoundException {
         new APIFunctions().APIDemo("/Users/shaola/IntellijProjects/DBConnector/properties/");
     }
 }

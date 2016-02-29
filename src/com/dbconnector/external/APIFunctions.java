@@ -121,12 +121,17 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException {
-        Connection connectionObject;
+    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException {
         DbTemplate dbTemplate = fetchDbTemplate(type);
         Map<String, String > fields = new HashMap<>();
         fields.put("Database", dbname);
-        return null;
+        fields.put("Server", "localhost");
+        fields.put("Port", String.valueOf(type.getDefaultPort()));
+        dbTemplate.getProperties().put("forceUrlShort", "true");
+        dbTemplate.setFields(fields);
+        dbTemplate.verify();
+        dbTemplate.resolveURL();
+        return Connect.establishConnection(dbTemplate);
     }
 
     @Override
@@ -136,15 +141,32 @@ public class APIFunctions implements DbConnectorAPI {
             case MYSQL:
                 dbTemplate.getProperties().put("name", "MySQL");
                 dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
-                dbTemplate.getProperties().put("url", "url=jdbc:mysql://Server:Port/Database?user=User&password=Password\n");
+                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
+                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
                 break;
             case ORACLE:
+                dbTemplate.getProperties().put("name", "Oracle");
+                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
+//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
+//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
                 break;
             case MSSQL:
+                dbTemplate.getProperties().put("name", "MSSSQL");
+                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
+//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
+//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
                 break;
             case POSTGRESQL:
+                dbTemplate.getProperties().put("name", "PostgreSQL");
+                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
+//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
+//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
                 break;
             case DB2:
+                dbTemplate.getProperties().put("name", "DB2");
+                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
+//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
+//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
                 break;
             default:
                 throw new TypeUnknownException(type);
