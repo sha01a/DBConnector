@@ -44,6 +44,7 @@ public class GuiTest {
   layout.marginLeft = 10;
   layout.marginRight = 10;
   layout.marginTop = 30;
+  layout.marginBottom = 5;
   shell.setLayout(layout);
 
   // Creating Label
@@ -59,6 +60,7 @@ public class GuiTest {
   // Pupulating it with data
   dbselector.add("MySQL (default)");
   dbselector.add("Oracle (default)");
+  dbselector.add("MS-SQL (default)");
   dbselector.add("PostgreSQL (default)");
   dbselector.add("DB2 (default)");
   for (String name : configs.keySet()) {
@@ -73,9 +75,9 @@ public class GuiTest {
   Label label2 = new Label(shell, SWT.SEPARATOR | SWT.HORIZONTAL);
   // Label Layout Data
   FormData label2Data = new FormData();
-  label2Data.bottom = new FormAttachment(dbselector, 25, SWT.BOTTOM);
-  label2Data.left = new FormAttachment(1);
-  label2Data.right = new FormAttachment(99);
+  label2Data.bottom = new FormAttachment(dbselector, 10, SWT.BOTTOM);
+  label2Data.left = new FormAttachment(0);
+  label2Data.right = new FormAttachment(100);
   label2.setLayoutData(label2Data);
 
 
@@ -88,12 +90,12 @@ public class GuiTest {
   quitBtn.setText("&Quit");
   //Button Layout data
   FormData connectData = new FormData(80, 30);
-  connectData.right = new FormAttachment(98);
-  connectData.bottom = new FormAttachment(98);
-  connectBtn.setLayoutData(connectData);
+  connectData.right = new FormAttachment(quitBtn, -5, SWT.LEFT);
+  connectData.bottom = new FormAttachment(quitBtn, 0, SWT.BOTTOM);
   FormData quitData = new FormData(80, 30);
-  quitData.right = new FormAttachment(connectBtn, -5, SWT.LEFT);
-  quitData.bottom = new FormAttachment(connectBtn, 0, SWT.BOTTOM);
+  quitData.right = new FormAttachment(98);
+  quitData.bottom = new FormAttachment(98);
+  connectBtn.setLayoutData(connectData);
   quitBtn.setLayoutData(quitData);
 
   shell.pack();
@@ -129,12 +131,27 @@ public class GuiTest {
  // Function Selector
  private void listFields(Combo dbselector) {
   String sel = dbselector.getText();
+  if (sel == "MySQL (default)"){
+  }
+  if (sel == "Oracle (default)"){
+  }
+  if (sel == "MS-SQL (default)"){
+  }
+  if (sel == "PorstgreSQL (default)"){
+  }
+  if (sel == "DB2 (default)"){
+  }
+  else {
+   Map<String,String> fields = configs.get(sel).getFields();
+   for (String filename : fields.keySet()){
+
+   }
+  }
+
+
 
  }
 
- private void populateSelection() {
-
- }
 
  private void init(){
   try {
@@ -150,8 +167,6 @@ public class GuiTest {
  }
 
 
-
- @SuppressWarnings("unused")
  public static void main(String[] args) {
   Display display = new Display();
   GuiTest ex = new GuiTest(display);
