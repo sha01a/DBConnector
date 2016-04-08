@@ -135,7 +135,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public DbTemplate fetchDbTemplate(DbType type) throws TypeUnknownException{
+    public DbTemplate fetchDbTemplate(DbType type) throws TypeUnknownException, RequiredParameterNotSetException{
         DbTemplate dbTemplate = new DbTemplate(new Properties());
         switch (type){
             case MYSQL:

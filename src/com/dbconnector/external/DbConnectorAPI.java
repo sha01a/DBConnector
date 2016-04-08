@@ -57,7 +57,7 @@ public interface DbConnectorAPI {
 
     // Gets DbTemplate for selected default DbType
 
-    public DbTemplate fetchDbTemplate(DbType type) throws TypeUnknownException;
+    public DbTemplate fetchDbTemplate(DbType type) throws TypeUnknownException, RequiredParameterNotSetException;
 
 
     /* Testing / Debugging functions */

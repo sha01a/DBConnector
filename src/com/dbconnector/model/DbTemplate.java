@@ -3,6 +3,7 @@ package com.dbconnector.model;
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
 
+import java.lang.ref.ReferenceQueue;
 import java.util.*;
 
 /**
@@ -25,7 +26,7 @@ public class DbTemplate {
     }
 
     // Constructor for FileRead
-    public DbTemplate(Properties properties) {
+    public DbTemplate(Properties properties) throws RequiredParameterNotSetException {
         this.fieldsDefined = false;
         this.properties = properties;
         this.createFields();
@@ -54,7 +55,14 @@ public class DbTemplate {
 
     public void setFields(Map<String, String> fields) { this.fields = fields; }
 
-    public void createFields(){
+    public void createFields() throws RequiredParameterNotSetException{
+        try {
+            if (! this.getProperties().containsKey("requiredFields")) {
+                throw new RequiredParameterNotSetException("requiredFields");
+            }
+        } catch (RequiredParameterNotSetException e) {
+            return;
+        }
         for (String s : this.getProperties().getProperty("requiredFields").split(",")){
             s.trim();
             if(this.fields == null) this.fields = new HashMap<String, String>();

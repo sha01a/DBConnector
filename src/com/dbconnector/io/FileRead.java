@@ -1,5 +1,6 @@
 package com.dbconnector.io;
 
+import com.dbconnector.exceptions.RequiredParameterNotSetException;
 import com.dbconnector.model.DbTemplate;
 
 import java.io.*;
@@ -26,7 +27,7 @@ public class FileRead {
                     currentProperties.load(Files.newBufferedReader(filePath));
                     dbList.add(new DbTemplate(currentProperties));
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 ;
