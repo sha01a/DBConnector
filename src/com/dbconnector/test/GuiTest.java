@@ -19,7 +19,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 /**
- * Created by choko-dm on 08.04.2016.
+ * Created by Dmitry Chokovski
  */
 public class GuiTest {
 
@@ -68,6 +68,16 @@ public class GuiTest {
   FormData dbselectorData = new FormData();
   dbselectorData.bottom = new FormAttachment(label1, 25, SWT.BOTTOM);
   dbselector.setLayoutData(dbselectorData);
+
+  // Creating Separator after selector
+  Label label2 = new Label(shell, SWT.SEPARATOR | SWT.HORIZONTAL);
+  // Label Layout Data
+  FormData label2Data = new FormData();
+  label2Data.bottom = new FormAttachment(dbselector, 25, SWT.BOTTOM);
+  label2Data.left = new FormAttachment(1);
+  label2Data.right = new FormAttachment(99);
+  label2.setLayoutData(label2Data);
+
 
 
   // Creating buttons
