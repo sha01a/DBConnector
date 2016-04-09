@@ -131,25 +131,32 @@ public class GuiTest {
  // Function Selector
  private void listFields(Combo dbselector) {
   String sel = dbselector.getText();
-  if (sel == "MySQL (default)"){
-  }
-  if (sel == "Oracle (default)"){
-  }
-  if (sel == "MS-SQL (default)"){
-  }
-  if (sel == "PorstgreSQL (default)"){
-  }
-  if (sel == "DB2 (default)"){
-  }
-  else {
-   Map<String,String> fields = configs.get(sel).getFields();
-   for (String filename : fields.keySet()){
+  System.out.print(sel);
+  switch (sel){
+   case "MySQL (default)":
+    System.out.print("YOYO");
+    break;
+   case "Oracle (default)":
 
+    break;
+   case "MS-SQL (default)":
+
+    break;
+   case "PostgreSQL (default)":
+
+    break;
+   case "DB2 (default)":
+
+    break;
+   default:
+    Map<String,String> fields = configs.get(sel).getFields();
+    int i = 0;
+    for (String name : fields.keySet()){
+     Label label = new Label(shell, SWT.LEFT);
+     label.setText(annotation);
+     i++;
+    }
    }
-  }
-
-
-
  }
 
 
@@ -158,7 +165,7 @@ public class GuiTest {
    APIFunctions api = new APIFunctions();
    Path currentRelativePath = Paths.get("");
    String here = currentRelativePath.toAbsolutePath().toString();
-   configs = api.readConfigs("C:/Users/choko-dm/Documents/IntelliJ Projects/DBConnector/properties");
+   configs = api.readConfigs("C:\\Users\\shaola\\IdeaProjects\\DBConnector");
   } catch (Exception e) {
    e.printStackTrace();
    System.exit(0);
