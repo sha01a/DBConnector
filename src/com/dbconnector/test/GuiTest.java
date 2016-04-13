@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
-
+import java.util.StringJoiner;
 
 
 /**
@@ -73,6 +73,7 @@ public class GuiTest {
         dbselector.add("MS-SQL (default)");
         dbselector.add("PostgreSQL (default)");
         dbselector.add("DB2 (default)");
+        dbselector.add("SQLite (default)");
         for (String name : configs.keySet()) {
             dbselector.add(name);
         }
@@ -91,7 +92,6 @@ public class GuiTest {
         label2.setLayoutData(label2Data);
 
         // Creating Composite to hold Fields
-        Composite fieldspace;
 
 
 
@@ -115,42 +115,53 @@ public class GuiTest {
         // Function selector
         dbselector.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
+                Map<String,String> fields = null;
                 String sel = dbselector.getText();
-                System.out.print(sel);
-                current = configs.get(sel);
-                Map<String,String> fields = current.getFields();
-                Composite replacement = new Composite(shell, SWT.NONE);
-                GridLayout grid = new GridLayout();
-                grid.numColumns = 2;
-                grid.makeColumnsEqualWidth = true;
-                switch (sel){
-                    case "MySQL (default)":
-                        System.out.print("YOYO");
-                        break;
-                    case "Oracle (default)":
-
-                        break;
-                    case "MS-SQL (default)":
-
-                        break;
-                    case "PostgreSQL (default)":
-
-                        break;
-                    case "DB2 (default)":
-
-                        break;
-                    default:
-                        int i = 0;
-                        for (String name : fields.keySet()){
-                            Label label = new Label(replacement, SWT.LEFT);
-                            label.setText(name);
-                            Text textfield = new Text(replacement, SWT.SINGLE);
-                        }
+                try {
+                    switch (sel) {
+                        case "MySQL (default)":
+                            current = api.fetchDbTemplate(DbType.MYSQL);
+                            fields = current.getFields();
+                            break;
+                        case "Oracle (default)":
+                            current = api.fetchDbTemplate(DbType.ORACLE);
+                            fields = current.getFields();
+                            break;
+                        case "MS-SQL (default)":
+                            current = api.fetchDbTemplate(DbType.MSSQL);
+                            fields = current.getFields();
+                            break;
+                        case "PostgreSQL (default)":
+                            current = api.fetchDbTemplate(DbType.POSTGRESQL);
+                            fields = current.getFields();
+                            break;
+                        case "DB2 (default)":
+                            current = api.fetchDbTemplate(DbType.DB2);
+                            fields = current.getFields();
+                            break;
+                        case "SQLite (default)":
+                            current = api.fetchDbTemplate(DbType.SQLITE);
+                            fields = current.getFields();
+                            break;
+                        default:
+                            current = configs.get(sel);
+                            fields = current.getFields();
+                    }
+                } catch (TypeUnknownException ex){
+                    popup(shell, ex, true);
+                } catch (RequiredParameterNotSetException ex){
+                    popup(shell, ex, true);
                 }
-                FormData fieldspaceData = new FormData();
-                fieldspaceData.top = new FormAttachment(label2, 10, SWT.BOTTOM);
-                replacement.setLayoutData(fieldspaceData);
-                shell.layout();
+                if (fields != null) {
+                    Composite replacement = makeFieldComposite(shell, fields);
+                    FormData fieldCompositeData = new FormData();
+                    fieldCompositeData.top = new FormAttachment(label2, 20, SWT.BOTTOM);
+                    fieldCompositeData.left = new FormAttachment(0);
+                    fieldCompositeData.right = new FormAttachment(100);
+                    replacement.setLayoutData(fieldCompositeData);
+                    replacement.setVisible(true);
+                    shell.layout();
+                }
             }
         });
         // Function Connect Button
@@ -161,23 +172,17 @@ public class GuiTest {
                     Map<String,String> fields = current.getFields();
                     current.setFields(fields);
                     Connection conn = api.connectToDb(current);
-                    MessageBox messageBox = new MessageBox(shell, SWT.ICON_WORKING);
-                    messageBox.setMessage("Connection successful!");
+                    popup(shell, null, false);
                 } catch (NoDriverFoundException ex) {
-                    MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-                    messageBox.setMessage(ex.toString());
+                    popup(shell, ex, true);
                 } catch (RequiredParameterNotSetException ex) {
-                    MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-                    messageBox.setMessage(ex.toString());
+                    popup(shell, ex, true);
                 } catch (FieldsNotSetException ex) {
-                    MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-                    messageBox.setMessage(ex.toString());
+                    popup(shell, ex, true);
                 } catch (SQLException ex) {
-                    MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-                    messageBox.setMessage("SQLException: " + ex.getMessage() + "\n" + "SQLState: " + ex.getSQLState() + "\n" + "VendorError: " + ex.getErrorCode());
+                    popup(shell, ex, true);
                 } catch (ClassNotFoundException ex) {
-                    MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-                    messageBox.setMessage("Correct class counldn't be found automatically in the Driver jar. Please specify a classname in your configuration!");
+                    popup(shell, ex, true);
                 }
 
 
@@ -200,6 +205,45 @@ public class GuiTest {
                 display.sleep();
             }
         }
+    }
+
+    public static void popup(Shell shell, Exception ex, boolean isError){
+        if (isError) {
+            if (ex instanceof SQLException) {
+                SQLException ex1 = (SQLException) ex;
+                MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+                messageBox.setMessage("SQLException: " + ex.getMessage() + "\n" + "SQLState: " + ex1.getSQLState() + "\n" + "VendorError: " + ex1.getErrorCode());
+            }
+            else if (ex instanceof ClassNotFoundException){
+                ClassNotFoundException ex1 = (ClassNotFoundException) ex;
+                MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+                messageBox.setMessage("Correct class counldn't be found automatically in the Driver jar. Please specify a classname in your configuration!");
+            }
+            else if (ex == null){
+                MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+                messageBox.setMessage(ex.toString());
+            }
+        }
+        else {
+            MessageBox messageBox = new MessageBox(shell, SWT.ICON_WORKING);
+            messageBox.setMessage("Connection successful!");
+        }
+    }
+
+    public static Composite makeFieldComposite(Shell shell, Map<String, String> fields) {
+        Composite replacement = new Composite(shell, SWT.NONE);
+        GridLayout grid = new GridLayout();
+        grid.numColumns = 2;
+        grid.makeColumnsEqualWidth = true;
+        replacement.setLayout(grid);
+        for (String fname : fields.keySet()) {
+            Label flabel = new Label(replacement, SWT.LEFT);
+            flabel.setText(fname);
+            Text ftext = new Text(replacement, SWT.SINGLE);
+        }
+
+
+        return replacement;
     }
 
     public static void main(String[] args) {

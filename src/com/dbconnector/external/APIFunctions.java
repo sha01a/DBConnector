@@ -137,42 +137,43 @@ public class APIFunctions implements DbConnectorAPI {
 
     @Override
     public DbTemplate fetchDbTemplate(DbType type) throws TypeUnknownException, RequiredParameterNotSetException{
-        DbTemplate dbTemplate = new DbTemplate(new Properties());
+        Properties properties = new Properties();
         switch (type){
             case MYSQL:
-                dbTemplate.getProperties().put("name", "MySQL (default)");
-                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
-                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
+                properties.put("name", "MySQL (default)");
+                properties.put("fields", "Server, Port, Database, User, Password");
+                properties.put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
                 break;
             case ORACLE:
-                dbTemplate.getProperties().put("name", "Oracle (default)");
-                dbTemplate.getProperties().put("fields", "Server, Port, SID, User, Password");
-                dbTemplate.getProperties().put("url", "jdbc:oracle:thin:User/Password@Server:Port:SID");
+                properties.put("name", "Oracle (default)");
+                properties.put("fields", "Server, Port, SID, User, Password");
+                properties.put("url", "jdbc:oracle:thin:User/Password@Server:Port:SID");
                 break;
             case MSSQL:
-                dbTemplate.getProperties().put("name", "MS-SQL (default)");
-                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
-                dbTemplate.getProperties().put("url", "jdbc:sqlserver://Server:Port;databaseName=Database;user=User;password=Password;");
+                properties.put("name", "MS-SQL (default)");
+                properties.put("fields", "Server, Port, Database, User, Password");
+                properties.put("url", "jdbc:sqlserver://Server:Port;databaseName=Database;user=User;password=Password;");
                 break;
             case POSTGRESQL:
-                dbTemplate.getProperties().put("name", "PostgreSQL (default)");
-                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
-                dbTemplate.getProperties().put("url", "jdbc:postgresql://Server:Port/Database?user=User&password=Password");
+                properties.put("name", "PostgreSQL (default)");
+                properties.put("fields", "Server, Port, Database, User, Password");
+                properties.put("url", "jdbc:postgresql://Server:Port/Database?user=User&password=Password");
                 break;
             case DB2:
-                dbTemplate.getProperties().put("name", "DB2 (default)");
-                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
-                dbTemplate.getProperties().put("url", "jdbc:db2://Server:Port/Database:user=User;password=Password");
+                properties.put("name", "DB2 (default)");
+                properties.put("fields", "Server, Port, Database, User, Password");
+                properties.put("url", "jdbc:db2://Server:Port/Database:user=User;password=Password");
                 break;
             case SQLITE:
-                dbTemplate.getProperties().put("name", "SQLite (default)");
-                dbTemplate.getProperties().put("fields", "Path");
-                dbTemplate.getProperties().put("url", "jdbc:sqlite:Path");
+                properties.put("name", "SQLite (default)");
+                properties.put("fields", "Path");
+                properties.put("url", "jdbc:sqlite:Path");
                 break;
             default:
                 throw new TypeUnknownException(type);
         }
-        return null;
+        DbTemplate dbTemplate = new DbTemplate(properties);
+        return dbTemplate;
     }
 
     @Override

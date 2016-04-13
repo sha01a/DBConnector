@@ -80,14 +80,7 @@ public class DbTemplate {
     public void setFields(Map<String, String> fields) { this.fields = fields; }
 
     public void createFields() throws RequiredParameterNotSetException{
-        try {
-            if (! this.getProperties().containsKey("requiredFields")) {
-                throw new RequiredParameterNotSetException("requiredFields");
-            }
-        } catch (RequiredParameterNotSetException e) {
-            return;
-        }
-        for (String s : this.getProperties().getProperty("requiredFields").split(",")){
+        for (String s : this.getProperties().getProperty("fields").split(",")){
             s.trim();
             if(this.fields == null) this.fields = new HashMap<String, String>();
             this.fields.put(s, null);
