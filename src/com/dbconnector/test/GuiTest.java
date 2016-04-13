@@ -212,7 +212,7 @@ public class GuiTest {
         try {
             Path currentRelativePath = Paths.get("");
             String here = currentRelativePath.toAbsolutePath().toString();
-            configs = api.readConfigs("/Users/shaola/IntellijProjects/DBConnector/properties");
+            configs = api.readConfigs("C:\\Users\\shaola\\IdeaProjects\\DBConnector\\properties");
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

@@ -10,6 +10,7 @@ import com.dbconnector.external.APIFunctions;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -26,7 +27,7 @@ public class FullAPITest {
 
     APIFunctions api = new APIFunctions();
 
-    public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException {
+    public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, SQLException {
 
         // Reading Properties and creating DbTemplates, then putting them into map, Key = name-property
         Map<String, DbTemplate> templates = FileRead.readDbList("/Users/shaola/IntellijProjects/DBConnector/properties");
@@ -78,6 +79,8 @@ public class FullAPITest {
             e.toString();
         } catch (NoDriverFoundException e){
             e.toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         reader.close();
         return connectionObject;

@@ -11,5 +11,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="swt" level="project" />
     <orderEntry type="library" name="swt (2)" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.4" level="project" />
   </component>
 </module>

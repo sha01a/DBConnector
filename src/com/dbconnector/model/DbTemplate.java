@@ -2,7 +2,6 @@ package com.dbconnector.model;
 
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
-import com.sun.tools.javac.util.Pair;
 
 import java.lang.ref.ReferenceQueue;
 import java.util.*;
@@ -18,7 +17,8 @@ public class DbTemplate {
     private Properties properties;
     private Map<String, String> fields;
     private boolean authStatus = false;
-    private Pair auth = new Pair("", "");
+    private String username;
+    private String password;
     private boolean fieldsDefined;
 
     private final List<String> requiredParams = Arrays.asList("name", "url");
@@ -50,6 +50,14 @@ public class DbTemplate {
         return this.fieldsDefined;
     }
 
+    public void setUsername(String user) {
+        this.username = user;
+    }
+
+    public void setPassword(String pwd) {
+        this.username = pwd;
+    }
+
     public Properties getProperties(){
 //        if(this.properties == null){
 //            this.properties = new Properties();
@@ -62,12 +70,10 @@ public class DbTemplate {
     }
 
     public String getUsername() {
-        return (String) auth.fst;
+        return (String) this.username;
     }
 
-    public String getPassword() {
-        return (String) auth.snd;
-    }
+    public String getPassword() { return (String) this.password; }
 
     public Map<String, String> getFields() { return this.fields; }
 
@@ -82,11 +88,6 @@ public class DbTemplate {
             return;
         }
         for (String s : this.getProperties().getProperty("requiredFields").split(",")){
-            s.trim();
-            if(this.fields == null) this.fields = new HashMap<String, String>();
-            this.fields.put(s, null);
-        }
-        for (String s : this.getProperties().getProperty("optionalFields").split(",")){
             s.trim();
             if(this.fields == null) this.fields = new HashMap<String, String>();
             this.fields.put(s, null);
