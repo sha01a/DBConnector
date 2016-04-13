@@ -12,7 +12,8 @@ public enum DbType {
     ORACLE(1521),
     MSSQL(1433),
     POSTGRESQL(5432),
-    DB2(50000);
+    DB2(50000),
+    SQLITE(0);
 
     private final int defaultPort;
 

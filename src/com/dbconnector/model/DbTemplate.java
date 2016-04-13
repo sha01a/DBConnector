@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Created by Dmitry Chokovski
  *
- * Internal representation of Database connection details, bundled for each database type.
+ * Internal representation of Database connection details, bundled for each DBMS type.
  *
  */
 public class DbTemplate {

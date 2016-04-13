@@ -140,34 +140,34 @@ public class APIFunctions implements DbConnectorAPI {
         DbTemplate dbTemplate = new DbTemplate(new Properties());
         switch (type){
             case MYSQL:
-                dbTemplate.getProperties().put("name", "MySQL");
-                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
+                dbTemplate.getProperties().put("name", "MySQL (default)");
+                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
                 dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
-                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
                 break;
             case ORACLE:
-                dbTemplate.getProperties().put("name", "Oracle");
-                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
-//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
-//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
+                dbTemplate.getProperties().put("name", "Oracle (default)");
+                dbTemplate.getProperties().put("fields", "Server, Port, SID, User, Password");
+                dbTemplate.getProperties().put("url", "jdbc:oracle:thin:User/Password@Server:Port:SID");
                 break;
             case MSSQL:
-                dbTemplate.getProperties().put("name", "MSSSQL");
-                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
-//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
-//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
+                dbTemplate.getProperties().put("name", "MS-SQL (default)");
+                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
+                dbTemplate.getProperties().put("url", "jdbc:sqlserver://Server:Port;databaseName=Database;user=User;password=Password;");
                 break;
             case POSTGRESQL:
-                dbTemplate.getProperties().put("name", "PostgreSQL");
-                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
-//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
-//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
+                dbTemplate.getProperties().put("name", "PostgreSQL (default)");
+                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
+                dbTemplate.getProperties().put("url", "jdbc:postgresql://Server:Port/Database?user=User&password=Password");
                 break;
             case DB2:
-                dbTemplate.getProperties().put("name", "DB2");
-                dbTemplate.getProperties().put("fields", "User, Password, Database, Server, Port");
-//                dbTemplate.getProperties().put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
-//                dbTemplate.getProperties().put("urlShort", "jdbc:mysql://Server:Port/Database");
+                dbTemplate.getProperties().put("name", "DB2 (default)");
+                dbTemplate.getProperties().put("fields", "Server, Port, Database, User, Password");
+                dbTemplate.getProperties().put("url", "jdbc:db2://Server:Port/Database:user=User;password=Password");
+                break;
+            case SQLITE:
+                dbTemplate.getProperties().put("name", "SQLite (default)");
+                dbTemplate.getProperties().put("fields", "Path");
+                dbTemplate.getProperties().put("url", "jdbc:sqlite:Path");
                 break;
             default:
                 throw new TypeUnknownException(type);
