@@ -55,7 +55,7 @@ public class DbTemplate {
     }
 
     public void setPassword(String pwd) {
-        this.username = pwd;
+        this.password = pwd;
     }
 
     public Properties getProperties(){
