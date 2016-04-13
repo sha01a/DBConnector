@@ -17,7 +17,7 @@ import java.util.Properties;
 /**
  * Created by Dmitry Chokovski
  *
- * Used to net to Databases by creating Connection-Objects
+ * Used to connect to Databases by creating Connection-Objects
  *
  */
 
@@ -25,7 +25,7 @@ public class Connect {
 
 
     // Establishes connection to database, returns Connection Object.
-    public static Connection establishConnection(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException{
+    public static Connection establishConnection(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException, SQLException{
         Connection connection = null;
         Properties properties = template.getProperties();
         try {
@@ -35,17 +35,14 @@ public class Connect {
                 // Loads driver
                 Loader.loadDriverClass(template, newDriver);
             }
-            // Establishes connection
-            if(template.getProperties().getProperty("forceUrlShort") == "true"){
-                connection = DriverManager.getConnection(template.getProperties().getProperty("urlShort"));
+            // Establishes connection with auth
+            if(template.getAuthStatus()){
+                connection = DriverManager.getConnection(template.getProperties().getProperty("url"), template.getUsername(), template.getPassword());
             }
+            // Without auth
             else {
                 connection = DriverManager.getConnection(template.getProperties().getProperty("url"));
             }
-        } catch (SQLException ex){
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
         } catch (IOException e){
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package com.dbconnector.model;
 
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
+import com.sun.tools.javac.util.Pair;
 
 import java.lang.ref.ReferenceQueue;
 import java.util.*;
@@ -16,12 +17,14 @@ public class DbTemplate {
 
     private Properties properties;
     private Map<String, String> fields;
+    private boolean authStatus = false;
+    private Pair auth = new Pair("", "");
     private boolean fieldsDefined;
 
     private final List<String> requiredParams = Arrays.asList("name", "url");
 
 
-    // Minimal Constructor
+    // Minimal Constructor  - not in use
     public DbTemplate() {
     }
 
@@ -29,6 +32,9 @@ public class DbTemplate {
     public DbTemplate(Properties properties) throws RequiredParameterNotSetException {
         this.fieldsDefined = false;
         this.properties = properties;
+        if (properties.containsKey("authentication")){
+            if (properties.getProperty("authentication") == "true" ){ this.authStatus = true; }
+        }
         this.createFields();
     }
 
@@ -49,6 +55,18 @@ public class DbTemplate {
 //            this.properties = new Properties();
 //        }
         return this.properties;
+    }
+
+    public boolean getAuthStatus(){
+        return this.authStatus;
+    }
+
+    public String getUsername() {
+        return (String) auth.fst;
+    }
+
+    public String getPassword() {
+        return (String) auth.snd;
     }
 
     public Map<String, String> getFields() { return this.fields; }
@@ -94,12 +112,6 @@ public class DbTemplate {
         }
         if (this.properties.containsKey("forceDriver")){
             if (this.properties.getProperty("driver") == null) {
-                this.unReady();
-                throw new RequiredParameterNotSetException("driver");
-            }
-        }
-        if (this.properties.containsKey("forceUrlShort")){
-            if (this.properties.getProperty("urlShort") == null) {
                 this.unReady();
                 throw new RequiredParameterNotSetException("driver");
             }

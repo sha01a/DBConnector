@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -34,7 +35,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(Map<String, DbTemplate> dbTemplateMap, String dbName) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException  {
+    public Connection connectToDb(Map<String, DbTemplate> dbTemplateMap, String dbName) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException, SQLException {
         DbTemplate dbTemplate = dbTemplateMap.get(dbName);
         dbTemplate.verify();
         dbTemplate.resolveURL();
@@ -43,7 +44,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(DbTemplate dbTemplate) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException  {
+    public Connection connectToDb(DbTemplate dbTemplate) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException, SQLException {
         dbTemplate.verify();
         dbTemplate.resolveURL();
         Connection connectionObject = Connect.establishConnection(dbTemplate);
@@ -51,7 +52,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(Properties properties, Map<String, String> fields) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException {
+    public Connection connectToDb(Properties properties, Map<String, String> fields) throws NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException, SQLException {
         DbTemplate dbTemplate = new DbTemplate(properties);
         dbTemplate.setFields(fields);
         dbTemplate.verify();
@@ -61,7 +62,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(DbType type, String dbname, String user, String password, String host, int port) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException {
+    public Connection connectToDb(DbType type, String dbname, String user, String password, String host, int port) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException, SQLException {
         DbTemplate dbTemplate = fetchDbTemplate(type);
         Map<String, String> fields = new HashMap<>();
         fields.put("User", user);
@@ -76,7 +77,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(DbType type, String dbname, String user, String password, int port) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException {
+    public Connection connectToDb(DbType type, String dbname, String user, String password, int port) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException, SQLException {
         DbTemplate dbTemplate = fetchDbTemplate(type);
         Map<String, String> fields = new HashMap<>();
         fields.put("User", user);
@@ -91,7 +92,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(DbType type, String dbname, String user, String password, String host) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException {
+    public Connection connectToDb(DbType type, String dbname, String user, String password, String host) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException, SQLException {
         DbTemplate dbTemplate = fetchDbTemplate(type);
         Map<String, String> fields = new HashMap<>();
         fields.put("User", user);
@@ -106,7 +107,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
      // redundaten code verkuerzen
     @Override
-    public Connection connectToDb(DbType type, String dbname, String user, String password) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException {
+    public Connection connectToDb(DbType type, String dbname, String user, String password) throws TypeUnknownException, FieldsNotSetException, RequiredParameterNotSetException, NoDriverFoundException, ClassNotFoundException, SQLException {
         DbTemplate dbTemplate = fetchDbTemplate(type);
         Map<String, String> fields = new HashMap<>();
         fields.put("User", user);
@@ -121,7 +122,7 @@ public class APIFunctions implements DbConnectorAPI {
     }
 
     @Override
-    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException {
+    public Connection connectToDb(DbType type, String dbname) throws TypeUnknownException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, RequiredParameterNotSetException, SQLException {
         DbTemplate dbTemplate = fetchDbTemplate(type);
         Map<String, String > fields = new HashMap<>();
         fields.put("Database", dbname);
