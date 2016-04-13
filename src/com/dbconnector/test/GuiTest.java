@@ -152,8 +152,8 @@ public class GuiTest {
     Map<String,String> fields = configs.get(sel).getFields();
     int i = 0;
     for (String name : fields.keySet()){
-     Label label = new Label(shell, SWT.LEFT);
-     label.setText(annotation);
+     //Label label = new Label(shell, SWT.LEFT);
+     //label.setText(annotation);
      i++;
     }
    }
@@ -165,7 +165,7 @@ public class GuiTest {
    APIFunctions api = new APIFunctions();
    Path currentRelativePath = Paths.get("");
    String here = currentRelativePath.toAbsolutePath().toString();
-   configs = api.readConfigs("C:\\Users\\shaola\\IdeaProjects\\DBConnector");
+   configs = api.readConfigs("/Users/shaola/IntellijProjects/DBConnector/properties");
   } catch (Exception e) {
    e.printStackTrace();
    System.exit(0);
