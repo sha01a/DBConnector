@@ -2,6 +2,7 @@ package com.dbconnector.model;
 
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.lang.ref.ReferenceQueue;
 import java.util.*;
@@ -33,7 +34,9 @@ public class DbTemplate {
         this.fieldsDefined = false;
         this.properties = properties;
         if (properties.containsKey("authentication")){
-            if (properties.getProperty("authentication") == "true" ){ this.authStatus = true; }
+            if (properties.getProperty("authentication") != "false" ){
+                this.authStatus = true;
+            }
         }
         this.createFields();
     }
@@ -98,10 +101,15 @@ public class DbTemplate {
             List<String> requiredFields = Arrays.asList(this.properties.getProperty("requiredFields").split(","));
             for (String field : requiredFields){
                 field = field.trim();
-                if(!this.fields.containsKey(field) || !this.fields.get(field).equals(null)){
-                    this.unReady();
+                try {
+                    if(this.fields.get(field).equals(null)){
+                        this.unReady();
+                        throw new FieldsNotSetException();
+                    }
+                } catch (NullPointerException ex){
                     throw new FieldsNotSetException();
                 }
+
             }
         }
         if (this.properties.containsKey("forceDriver")){
@@ -116,9 +124,12 @@ public class DbTemplate {
     public void resolveURL() throws FieldsNotSetException{
         if(this.isReady() == false) throw new FieldsNotSetException();
         for(Map.Entry<String,String> entry : this.fields.entrySet()) {
-            this.properties.setProperty("url", this.properties.getProperty("url").replaceAll(entry.getKey(), entry.getValue()));
-            if (this.properties.containsKey("urlShort")){
-                this.properties.setProperty("urlShort", this.properties.getProperty("urlShort").replaceAll(entry.getKey(), entry.getValue()));
+            try {
+                this.properties.setProperty("url", this.properties.getProperty("url").replaceAll(entry.getKey().trim(), entry.getValue()));
+                System.out.println(entry.getKey() + " --- " + entry.getValue());
+                System.out.println(this.getProperties().getProperty("url"));
+            } catch (NullPointerException ex) {
+                throw new FieldsNotSetException();
             }
         }
     }

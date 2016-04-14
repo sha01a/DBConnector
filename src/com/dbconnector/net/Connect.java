@@ -29,11 +29,13 @@ public class Connect {
         Connection connection = null;
         Properties properties = template.getProperties();
         try {
-            if(properties.getProperty("forceDriver").equals("true") || DriverManager.getDriver(properties.getProperty("url"))==null){
-                // Downloads driver
-                File newDriver = Downloader.downloadDriver(Downloader.makeUrl(properties.getProperty("driver")));
-                // Loads driver
-                Loader.loadDriverClass(template, newDriver);
+            if(properties.containsKey("forceDriver")) {
+                if(properties.getProperty("forceDriver").equals("true") || DriverManager.getDriver(properties.getProperty("url"))==null){
+                    // Downloads driver
+                    File newDriver = Downloader.downloadDriver(Downloader.makeUrl(properties.getProperty("driver")));
+                    // Loads driver
+                    Loader.loadDriverClass(template, newDriver);
+                }
             }
             // Establishes connection with auth
             if(template.getAuthStatus()){

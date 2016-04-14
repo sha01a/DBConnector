@@ -142,31 +142,37 @@ public class APIFunctions implements DbConnectorAPI {
             case MYSQL:
                 properties.put("name", "MySQL (default)");
                 properties.put("fields", "Server, Port, Database, User, Password");
+//                properties.put("requiredFields", "Server, Port, Database, User, Password");
                 properties.put("url", "jdbc:mysql://Server:Port/Database?user=User&password=Password");
                 break;
             case ORACLE:
                 properties.put("name", "Oracle (default)");
                 properties.put("fields", "Server, Port, SID, User, Password");
+//                properties.put("requiredFields", "Server, Port, SID, User, Password");
                 properties.put("url", "jdbc:oracle:thin:User/Password@Server:Port:SID");
                 break;
             case MSSQL:
                 properties.put("name", "MS-SQL (default)");
                 properties.put("fields", "Server, Port, Database, User, Password");
+//                properties.put("requiredFields", "Server, Port, SID, User, Password");
                 properties.put("url", "jdbc:sqlserver://Server:Port;databaseName=Database;user=User;password=Password;");
                 break;
             case POSTGRESQL:
                 properties.put("name", "PostgreSQL (default)");
                 properties.put("fields", "Server, Port, Database, User, Password");
+//                properties.put("requiredFields", "Server, Port, SID, User, Password");
                 properties.put("url", "jdbc:postgresql://Server:Port/Database?user=User&password=Password");
                 break;
             case DB2:
                 properties.put("name", "DB2 (default)");
                 properties.put("fields", "Server, Port, Database, User, Password");
+//                properties.put("requiredFields", "Server, Port, SID, User, Password");
                 properties.put("url", "jdbc:db2://Server:Port/Database:user=User;password=Password");
                 break;
             case SQLITE:
                 properties.put("name", "SQLite (default)");
                 properties.put("fields", "Path");
+//                properties.put("requiredFields", "Path");
                 properties.put("url", "jdbc:sqlite:Path");
                 break;
             default:
