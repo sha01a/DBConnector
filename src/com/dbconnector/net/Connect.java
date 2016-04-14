@@ -39,11 +39,11 @@ public class Connect {
             }
             // Establishes connection with auth
             if(template.getAuthStatus()){
-                connection = DriverManager.getConnection(template.getProperties().getProperty("url"), template.getUsername(), template.getPassword());
+                connection = DriverManager.getConnection(template.getUrl(), template.getUsername(), template.getPassword());
             }
             // Without auth
             else {
-                connection = DriverManager.getConnection(template.getProperties().getProperty("url"));
+                connection = DriverManager.getConnection(template.getUrl());
             }
         } catch (IOException e){
             e.printStackTrace();

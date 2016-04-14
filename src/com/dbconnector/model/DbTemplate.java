@@ -20,6 +20,7 @@ public class DbTemplate {
     private boolean authStatus = false;
     private String username;
     private String password;
+    private String url;
     private boolean fieldsDefined;
 
     private final List<String> requiredParams = Arrays.asList("name", "url");
@@ -73,10 +74,16 @@ public class DbTemplate {
     }
 
     public String getUsername() {
-        return (String) this.username;
+        return this.username;
     }
 
-    public String getPassword() { return (String) this.password; }
+    public String getPassword() { return this.password; }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) { this.url = url; }
 
     public Map<String, String> getFields() { return this.fields; }
 
@@ -123,11 +130,10 @@ public class DbTemplate {
 
     public void resolveURL() throws FieldsNotSetException{
         if(this.isReady() == false) throw new FieldsNotSetException();
+        this.setUrl(this.properties.getProperty("url"));
         for(Map.Entry<String,String> entry : this.fields.entrySet()) {
             try {
-                this.properties.setProperty("url", this.properties.getProperty("url").replaceAll(entry.getKey().trim(), entry.getValue()));
-                System.out.println(entry.getKey() + " --- " + entry.getValue());
-                System.out.println(this.getProperties().getProperty("url"));
+                this.setUrl(this.getUrl().replaceAll(entry.getKey().trim(), entry.getValue()));
             } catch (NullPointerException ex) {
                 throw new FieldsNotSetException();
             }

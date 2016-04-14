@@ -1,4 +1,4 @@
-package com.dbconnector.test;
+package com.dbconnector.gui;
 
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
@@ -10,14 +10,9 @@ import com.dbconnector.model.DbType;
 import org.eclipse.swt.*;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.LineAttributes;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.swt.widgets.List;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -28,7 +23,7 @@ import java.util.*;
 /**
  * Created by Dmitry Chokovski
  */
-public class GuiTest {
+public class Mainview {
 
     private final static String annotation = "Please select the desired database connection template: ";
 
@@ -38,7 +33,7 @@ public class GuiTest {
     DbTemplate current;
     boolean firstsel = true;
 
-    public GuiTest(Display display) {
+    public Mainview(Display display) {
 
         //Initialize
         init();
@@ -168,7 +163,7 @@ public class GuiTest {
         connectBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-//                try {
+                try {
                     if (firstsel) {
                         popup(shell, null, true);
                     } else{
@@ -187,30 +182,28 @@ public class GuiTest {
                                     if (t.getText() != "") {
                                         fields.put(l.getText(), t.getText());
                                     } else {
-                                        System.out.print("YOYOYO");
                                         fields.put(l.getText(), null);
                                     }
                                 }
                             }
                         }
                         for (Map.Entry val : fields.entrySet()){
-                            System.out.print(val.getKey() + " --- " + val.getValue());
                         }
                         current.setFields(fields);
-                        //Connection conn = api.connectToDb(current);
+                        Connection conn = api.connectToDb(current);
                         popup(shell, null, false);
                     }
-//                } catch (NoDriverFoundException ex) {
-//                    popup(shell, ex, true);
-//                } catch (RequiredParameterNotSetException ex) {
-//                    popup(shell, ex, true);
-//                } catch (FieldsNotSetException ex) {
-//                    popup(shell, ex, true);
-//                } catch (SQLException ex) {
-//                    popup(shell, ex, true);
-//                } catch (ClassNotFoundException ex) {
-//                    popup(shell, ex, true);
-//                }
+                } catch (NoDriverFoundException ex) {
+                    popup(shell, ex, true);
+                } catch (RequiredParameterNotSetException ex) {
+                    popup(shell, ex, true);
+                } catch (FieldsNotSetException ex) {
+                    popup(shell, ex, true);
+                } catch (SQLException ex) {
+                    popup(shell, ex, true);
+                } catch (ClassNotFoundException ex) {
+                    popup(shell, ex, true);
+                }
             }
         });
 
@@ -288,7 +281,7 @@ public class GuiTest {
 
     public static void main(String[] args) {
         Display display = new Display();
-        GuiTest ex = new GuiTest(display);
+        Mainview ex = new Mainview(display);
         display.dispose();
     }
 
