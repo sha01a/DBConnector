@@ -30,16 +30,26 @@ public class FullAPITest {
     public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, SQLException {
 
         // Reading Properties and creating DbTemplates, then putting them into map, Key = name-property
-        Map<String, DbTemplate> templates = FileRead.readDbList("/Users/shaola/IntellijProjects/DBConnector/properties");
+        Map<String, DbTemplate> templates = FileRead.readDbList("C:\\workspace\\DBConnector\\properties");
 
         // Extracting Template for testing
-        DbTemplate testTemplate = templates.get("mysql");
+        DbTemplate testTemplate = templates.get("MySQL");
 
         //Filling with connection parameters to test-db
-        testTemplate.getFields().put("User", "admin");
-        testTemplate.getFields().put("Server", "192.168.1.1");
-        testTemplate.getFields().put("Database", "testdb");
-        testTemplate.getFields().put("Password", "qwerty");
+//        testTemplate.getFields().put("User", "root");
+        testTemplate.getFields().put("Server", "localhost");
+        testTemplate.getFields().put("Port", "3306");
+        testTemplate.getFields().put("Database", "ctms2");
+//        testTemplate.getFields().put("Password", "mysql");
+        testTemplate.setPassword("mysql");
+        testTemplate.setUsername("root");
+
+        try {
+            testTemplate.verify();
+        } catch (RequiredParameterNotSetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // Resolving URL by substituting field names with above params
         testTemplate.resolveURL();

@@ -25,14 +25,15 @@ public class Loader {
         JarFile jarFile = new JarFile(jar);
 
         URL [] paths = new URL[1];
-        paths[0] = new URL(jar.getPath());
+        paths[0] = new URL("file://" + jar.getAbsolutePath());
 
         URLClassLoader classLoader = new URLClassLoader (paths);
 
 
         // Loading class given in Properties
         if(dbTemplate.getProperties().getProperty("driverClass") != null){
-            classLoader.loadClass(dbTemplate.getProperties().getProperty("driverClass"));
+            Class.forName("com.mysql.jdbc.Driver");
+            //classLoader.loadClass(dbTemplate.getProperties().getProperty("driverClass"));
         } else { // If no class given loading set Main class of .jar Package
             if(jarFile.getManifest().getEntries().containsKey("Main-Class")) {
                 String mainClassName = jarFile.getManifest().getMainAttributes().getValue("Main-Class");;
