@@ -1,6 +1,8 @@
 package com.dbconnector.test;
 
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
+import com.dbconnector.io.Downloader;
+import com.dbconnector.io.Loader;
 import com.dbconnector.net.Connect;
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.NoDriverFoundException;
@@ -8,9 +10,14 @@ import com.dbconnector.io.FileRead;
 import com.dbconnector.model.DbTemplate;
 import com.dbconnector.external.APIFunctions;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -27,10 +34,10 @@ public class FullAPITest {
 
     APIFunctions api = new APIFunctions();
 
-    public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, SQLException {
+    public static void main(String args []) throws IOException, NoDriverFoundException, ClassNotFoundException, FieldsNotSetException, SQLException, NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
 
         // Reading Properties and creating DbTemplates, then putting them into map, Key = name-property
-        Map<String, DbTemplate> templates = FileRead.readDbList("C:\\workspace\\DBConnector\\properties");
+        Map<String, DbTemplate> templates = FileRead.readDbList("/Users/shaola/IntellijProjects/DBConnector/properties");
 
         // Extracting Template for testing
         DbTemplate testTemplate = templates.get("MySQL");
@@ -47,15 +54,19 @@ public class FullAPITest {
         try {
             testTemplate.verify();
         } catch (RequiredParameterNotSetException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         // Resolving URL by substituting field names with above params
         testTemplate.resolveURL();
+        File newDriver = Downloader.downloadDriver(Downloader.makeUrl(testTemplate.getProperties().getProperty("driver")));
+
+        Loader.loadDriverClass(testTemplate, newDriver);
+
+        Connect.listDrivers();
 
         // Establishing connection to DB
-        Connect.establishConnection(testTemplate);
+        //Connect.establishConnection(testTemplate);
     }
 
 

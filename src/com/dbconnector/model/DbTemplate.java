@@ -2,7 +2,7 @@ package com.dbconnector.model;
 
 import com.dbconnector.exceptions.FieldsNotSetException;
 import com.dbconnector.exceptions.RequiredParameterNotSetException;
-import org.apache.commons.lang3.ObjectUtils;
+//import org.apache.commons.lang3.ObjectUtils;
 
 import java.lang.ref.ReferenceQueue;
 import java.util.*;
