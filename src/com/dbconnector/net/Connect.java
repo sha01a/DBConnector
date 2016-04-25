@@ -40,7 +40,10 @@ public class Connect {
             }
             // Establishes connection with auth
             if(template.getAuthStatus()){
-                connection = DriverManager.getConnection(template.getUrl(), template.getUsername(), template.getPassword());
+                Properties p = new Properties();
+                p.setProperty("user", template.getUsername());
+                p.setProperty("password", template.getPassword());
+                connection = DriverManager.getConnection(template.getUrl(), p);
             }
             // Without auth
             else {
@@ -61,7 +64,8 @@ public class Connect {
     }
 
     // Lists all available drivers - FOR TESTING PURPOSES
-    public static void listDrivers() {
+    public static void listDrivers(Driver driver) throws SQLException {
+        DriverManager.registerDriver(driver);
         Enumeration driverList = DriverManager.getDrivers();
         while (driverList.hasMoreElements()) {
             Driver driverClass = (Driver) driverList.nextElement();

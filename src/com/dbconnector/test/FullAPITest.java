@@ -39,6 +39,8 @@ public class FullAPITest {
         // Reading Properties and creating DbTemplates, then putting them into map, Key = name-property
         Map<String, DbTemplate> templates = FileRead.readDbList("/Users/shaola/IntellijProjects/DBConnector/properties");
 
+
+
         // Extracting Template for testing
         DbTemplate testTemplate = templates.get("MySQL");
 
@@ -61,12 +63,12 @@ public class FullAPITest {
         testTemplate.resolveURL();
         File newDriver = Downloader.downloadDriver(Downloader.makeUrl(testTemplate.getProperties().getProperty("driver")));
 
-        Loader.loadDriverClass(testTemplate, newDriver);
+        Driver dr = Loader.loadDriverClass(testTemplate, newDriver);
 
-        Connect.listDrivers();
+        //Connect.listDrivers(dr);
 
         // Establishing connection to DB
-        //Connect.establishConnection(testTemplate);
+        Connect.establishConnection(testTemplate);
     }
 
 
