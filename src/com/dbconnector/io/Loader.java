@@ -38,26 +38,24 @@ public class Loader {
 
             // Loading class given in Properties
             if (dbTemplate.getProperties().getProperty("driverClass") != null) {
-                while (e.hasMoreElements()) {
-                    JarEntry je = e.nextElement();
-                    if(je.isDirectory() || !je.getName().endsWith(".class")){
-                        continue;
-                    }
-                    // -6 because of .class
-                    String className = je.getName().substring(0,je.getName().length()-6);
-                    className = className.replace('/', '.');
-                    Class c = null;
-                    System.out.println(className);
-                    c = classLoader.loadClass(className);
-                }
-                Class cl = classLoader.loadClass(dbTemplate.getProperties().getProperty("driverClass"));
-                dr = (Driver) cl.newInstance();
+//                while (e.hasMoreElements()) {
+//                    JarEntry je = e.nextElement();
+//                    if(je.isDirectory() || !je.getName().endsWith(".class")){
+//                        continue;
+//                    }
+//                    // -6 because of .class
+//                    String className = je.getName().substring(0,je.getName().length()-6);
+//                    className = className.replace('/', '.');
+//                    Class c = null;
+//                    System.out.println(className);
+//                    c = classLoader.loadClass(className);
+//                }
+                dr = (Driver) Class.forName(dbTemplate.getProperties().getProperty("driverClass"), true, classLoader).newInstance();
                 DriverManager.registerDriver(new DriverHolder(dr));
             } else { // If no class given loading set Main class of .jar Package
                 if (jarFile.getManifest().getEntries().containsKey("Main-Class")) {
                     String mainClassName = jarFile.getManifest().getMainAttributes().getValue("Main-Class");
-                    Class cl = classLoader.loadClass(mainClassName);
-                    dr = (Driver) cl.newInstance();
+                    dr = (Driver) Class.forName(mainClassName, true, classLoader).newInstance();
                     DriverManager.registerDriver(new DriverHolder(dr));
                 } else {
                     throw new ClassNotFoundException();

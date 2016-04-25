@@ -8,6 +8,8 @@ import com.dbconnector.model.DbTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
@@ -29,11 +31,12 @@ public class Connect {
     public static Connection establishConnection(DbTemplate template) throws NoDriverFoundException, ClassNotFoundException, SQLException{
         Connection connection = null;
         Properties properties = template.getProperties();
+        File newDriver = null;
         try {
             if(properties.containsKey("forceDriver")) {
                 if(properties.getProperty("forceDriver").equals("true") || DriverManager.getDriver(properties.getProperty("url"))==null){
                     // Downloads driver
-                    File newDriver = Downloader.downloadDriver(Downloader.makeUrl(properties.getProperty("driver")));
+                    newDriver = Downloader.downloadDriver(Downloader.makeUrl(properties.getProperty("driver")));
                     // Loads driver
                     Loader.loadDriverClass(template, newDriver);
                 }
