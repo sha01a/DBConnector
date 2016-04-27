@@ -19,6 +19,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -64,7 +65,11 @@ public class FullAPITest {
         File newDriver = Downloader.downloadDriver(Downloader.makeUrl(testTemplate.getProperties().getProperty("driver")));
 
         Driver dr = Loader.loadDriverClass(testTemplate, newDriver);
+        Properties p = new Properties();
+        p.setProperty("user", testTemplate.getUsername());
+        p.setProperty("password", testTemplate.getPassword());
 
+//        Connection c = dr.connect(testTemplate.getUrl(), p);
         //Connect.listDrivers(dr);
 
         // Establishing connection to DB

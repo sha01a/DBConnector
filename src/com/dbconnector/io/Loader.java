@@ -28,29 +28,20 @@ public class Loader {
 
     public static Driver loadDriverClass(DbTemplate dbTemplate, File jar) throws ClassNotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, SQLException {
         URLClassLoader classLoader = null;
-        JarFile jarFile = null;
         Driver dr = null;
+        JarFile jarFile = new JarFile(jar);
+
+        // Load .jar - hack
+        URL url = jar.toURI().toURL();
+        URLClassLoader cL = (URLClassLoader)ClassLoader.getSystemClassLoader();
+        Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+        method.setAccessible(true);
+        method.invoke(cL, url);
 
         try {
-            classLoader = new URLClassLoader(new URL[] { jar.toURI().toURL() }, System.class.getClassLoader());
-            jarFile = new JarFile(jar);
-            Enumeration<JarEntry> e = jarFile.entries();
-
             // Loading class given in Properties
             if (dbTemplate.getProperties().getProperty("driverClass") != null) {
-//                while (e.hasMoreElements()) {
-//                    JarEntry je = e.nextElement();
-//                    if(je.isDirectory() || !je.getName().endsWith(".class")){
-//                        continue;
-//                    }
-//                    // -6 because of .class
-//                    String className = je.getName().substring(0,je.getName().length()-6);
-//                    className = className.replace('/', '.');
-//                    Class c = null;
-//                    System.out.println(className);
-//                    c = classLoader.loadClass(className);
-//                }
-                dr = (Driver) Class.forName(dbTemplate.getProperties().getProperty("driverClass"), true, classLoader).newInstance();
+                dr = (Driver) Class.forName(dbTemplate.getProperties().getProperty("driverClass"), true, cL).newInstance();
                 DriverManager.registerDriver(new DriverHolder(dr));
             } else { // If no class given loading set Main class of .jar Package
                 if (jarFile.getManifest().getEntries().containsKey("Main-Class")) {
